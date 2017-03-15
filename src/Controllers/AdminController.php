@@ -10,6 +10,6 @@ class AdminController extends BaseController
 
 	public function index(Request $request, Response $response)
 	{
-		return $this->view->render($response, 'admin/login.twig');
+		return $this->view->render($response, 'admin/home.twig');
 	}
 }
