@@ -1,0 +1,19 @@
+{% extends 'front-end/app.twig' %}
+
+{% block nav %}
+    {% include 'front-end/partials/navuser.twig' %}
+{% endblock %}
+
+{% block title %} Login - MIT Book Store {% endblock %}
+
+{% block content %}
+	{% include 'front-end/partials/modal-register-login.twig'%}
+{% endblock %}
+
+{% block script %}
+    <script>
+    	$(document).ready(function(){
+			openLoginModal();
+		});
+    </script>
+{% endblock %}

@@ -11,12 +11,12 @@ return [
 
 	//setting language
 	'lang'	=> [
-		'default'	=> 'id',
+		'default'	=> 'en',
 	],
 
 	//setting db (with doctrine)
 	'db'	=> [
-		'url'	=> 'mysql://root:poikoiloi@@chongieball/chongieball_framework',
+		'url'	=> 'mysql://root:poikoiloi@@chongieball/mbs',
 	],
 
 	//setting view (using twig)

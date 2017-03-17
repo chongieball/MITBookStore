@@ -6,7 +6,7 @@ use Slim\Views\TwigExtension as ViewExt;
 
 $container = $app->getContainer();
 
-$container['db'] = function (Container $container) use ($setting) {
+$container['db'] = function (Container $container) {
 	$setting = $container->get('settings');
 
 	$config = new \Doctrine\DBAL\Configuration();
@@ -17,7 +17,7 @@ $container['db'] = function (Container $container) use ($setting) {
 	return $connect->createQueryBuilder();
 };
 
-$container['view'] = function (Container $container) use ($setting) {
+$container['view'] = function (Container $container) {
 	$setting = $container->get('settings')['view'];
 
 	$view = new View($setting['path'], $setting['twig']);
@@ -25,16 +25,24 @@ $container['view'] = function (Container $container) use ($setting) {
 
 	$view->getEnvironment()->addGlobal('flash', $container->flash);
 
-	$view->getEnvironment()->addGlobal('old', $_SESSION['old']);
-	unset($_SESSION['old']);
-
-	$view->getEnvironment()->addGlobal('errors', $_SESSION['errors']);
-	unset($_SESSION['errors']);
+	if ($_SESSION['old']) {
+		$view->getEnvironment()->addGlobal('old', $_SESSION['old']);
+		unset($_SESSION['old']);
+	}
+	
+	if ($_SESSION['errors']) {
+		$view->getEnvironment()->addGlobal('errors', $_SESSION['errors']);
+		unset($_SESSION['errors']);
+	}
+	
+	if ($_SESSION['user']) {
+		$view->getEnvironment()->addGlobal('user', $_SESSION['user']);
+	}
 	
 	return $view;
 };
 
-$container['validator'] = function (Container $container) use ($setting) {
+$container['validator'] = function (Container $container) {
 	$setting = $container->get('settings')['lang']['default'];
 	$params = $container['request']->getParams();
 	
