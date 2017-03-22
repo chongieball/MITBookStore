@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace MBS\Models;
 
@@ -53,5 +53,26 @@ abstract class BaseModel
 				->setParameters($paramData)
 				->execute();
 	}
+
+	public function updateData(array $data, $id)
+    {
+        $valuesColumn = [];
+        $valuesData   = [];
+
+        $this->db->update($this->table);
+
+        foreach ($data as $dataKey => $dataValue) {
+
+                $valuesColumn[$dataKey] = ':' .$dataKey;
+                $valuesData[$dataKey]   = $dataValue;
+
+                $this->db->set($dataKey, $valuesColumn[$dataKey]);
+
+        }
+
+        $this->db->setParameters($valuesData)
+             ->where('id ='. $id)
+             ->execute();
+    }
 
 }
