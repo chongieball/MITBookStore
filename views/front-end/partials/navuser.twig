@@ -1,0 +1,74 @@
+<header class="main-header">
+    <a href="{{ path_for('home')}}" class="logo">
+        <span class="logo-mini"><b>MBS</b></span>
+        <span class="logo-lg"><b>MIT</b> Book Store</span>
+    </a>
+    <nav class="navbar navbar-static-top" role="navigation">
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                {% if user %}
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="hidden-xs">{{user.username}}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="user-footer">
+                                <a href="#" class="btn btn-default btn-flat">Change Password</a>
+                        </li>
+                        <li class="user-footer">
+                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li>
+                    <a data-toggle="modal" href="javascript:void(0)" onclick="openLoginModal();" title="Login"><i class="fa fa-lock"></i></a>
+                </li>
+                <li>
+                    <a data-toggle="modal" href="javascript:void(0)" onclick="openRegisterModal();" title="Register"><i class="fa fa-user-plus"></i></a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <ul class="sidebar-menu">
+            <li class="header">
+                <form action="#" method="POST" class="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" placeholder="Search Book..." name="search">
+                        <span class="input-group-btn">
+                            <button id="search-btn" class="btn btn-flat">
+                                <i class="fa fa-book"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-tasks"></i><span>Category</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="#">1</a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">3</a>
+                    </li>
+                    <li>
+                        <a href="#">4</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+</aside>

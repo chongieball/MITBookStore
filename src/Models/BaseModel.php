@@ -1,10 +1,11 @@
 <?php
 
-namespace Chongieball\Models;
+namespace MBS\Models;
 
 abstract class BaseModel
 {
 	protected $table;
+	protected $column;
 	protected $db;
 
 	public function __construct($db)
@@ -15,7 +16,7 @@ abstract class BaseModel
 	public function getAll()
 	{
 		$this->db
-			 ->select('*')
+			 ->select($this->column)
 			 ->from($this->table);
 
 		$result = $this->db->execute();
@@ -28,7 +29,7 @@ abstract class BaseModel
 	{
 		$param = ':'.$column;
 		$this->db
-			 ->select('*')
+			 ->select($this->column)
 			 ->from($this->table)
 			 ->where($column . ' = '. $param)
 			 ->setParameter($param, $value);

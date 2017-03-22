@@ -8,18 +8,15 @@ use MBS\Models\Admin;
 
 class AdminController extends BaseController
 {
-
-
-
+  
 	public function index(Request $request, Response $response)
 	{
-		return $this->view->render($response, 'admin/home.twig');
+		return $this->view->render($response, 'back-end/admin/home.twig');
 	}
-
 
 	public function getSignIn()
 	{
-		return $this->view->render($response, 'admin/signin.twig');
+		return $this->view->render($response, 'back-end/admin/login.twig');
 	}
 
 	public function postSignIn()
@@ -41,7 +38,7 @@ class AdminController extends BaseController
 
 	public function getChangePassword()
 	{
-		return $this->view->render($response, 'admin/changepassword.twig');
+		return $this->view->render($response, 'back-end/admin/changepassword.twig');
 
 	}
 
@@ -55,13 +52,13 @@ class AdminController extends BaseController
 		$verify   = password_verify($request->getParam('password_old'), $password);
 
 		if (!$verify) {
-
+      $_SESSION['errors']['password'][] = 'Your Old Password is Wrong';
 			return $response->witRedirect($this->router->pathFor('admin.change.password'));
 
 		} else {
 			$admin->setPassword($request->getParam('password'), $id);
-			return $response->withRedirect($this->router->pathFor('admin.home'));
 		}
+    return $response->withRedirect($this->router->pathFor('admin.home'));
 	}
 
 	public function signOut()
