@@ -6,14 +6,13 @@ class Admin extends BaseModel
 {
     protected $table = 'admin';
 
-    public function add(array $data)
+    public function setPassword($password, $id)
     {
         $data = [
-            'username' => $data['username'],
-            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'password' => password_hash($password, PASSWORD_DEFAULT)
         ];
 
-        $this->create($data);
+        $this->updateData($data, $id);
     }
 }
 
