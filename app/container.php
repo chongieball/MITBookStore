@@ -35,10 +35,16 @@ $container['view'] = function (Container $container) {
 		unset($_SESSION['errors']);
 	}
 	
+	if ($_SESSION['cart']) {
+		$view->getEnvironment()->addGlobal('cart', $_SESSION['cart']);
+	}
+
 	if ($_SESSION['user']) {
 		$view->getEnvironment()->addGlobal('user', $_SESSION['user']);
 	}
 	
+	$view->getEnvironment()->addGlobal('basket', $container->basket);
+
 	return $view;
 };
 
@@ -51,4 +57,19 @@ $container['validator'] = function (Container $container) {
 
 $container['flash'] = function (Container $container) {
 	return new \Slim\Flash\Messages;
+};
+
+$container['csrf'] = function (Container $container) {
+	return new \Slim\Csrf\Guard;
+};
+
+$container['session'] = function (Container $container) {
+	return new MBS\Core\Storage\SessionStorage;
+};
+
+$container['basket'] = function (Container $container) {
+	return new MBS\Basket\Basket(
+		$container->session, 
+		new MBS\Models\Book($container->db)
+	);
 };
