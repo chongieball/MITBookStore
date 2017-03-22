@@ -21,9 +21,11 @@ return [
 
 	//setting view (using twig)
 	'view'	=> [
-		'path'	=> '../views',
+		'path'	=> __DIR__. '/../views',
 		'twig'	=> [
 			'cache'	=> false,
 			],
 	],
+
+	'determineRouteBeforeAppMiddleware' => true,
 ];

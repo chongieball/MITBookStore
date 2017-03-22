@@ -1,0 +1,86 @@
+{% extends 'front-end/app.twig' %}
+
+{% block nav %}
+    {% include 'front-end/partials/navuser.twig' %}
+{% endblock %}
+
+{% block title %} My Account - MIT Book Store {% endblock %}
+
+{% block content %}
+		<section class="content-header">
+			<h1>My Account</h1>
+			<ol class="breadcrumb">
+        		<li><a href="{{path_for('home')}}"><i class="fa fa-home"></i>Home Page</a></li>
+        		<li class="active">My Account</li>
+      		</ol>
+		</section>
+		<section class="content">
+			{% include 'templates/partials/flash.twig'%}
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="box">
+						<table class="table table-hover">
+							<div class="box-header">
+								<h4 class="box-title"><b>General</b></h4>
+								<div class="box-tools">
+									<a href="{{path_for('user.edit')}}?section=general">
+										<button type="button" class="btn btn-danger">Edit</button>
+									</a>
+								</div>
+							</div>
+							<div class="box-body table-responsive no-padding">
+								<tr>
+									<td class="col-md-2 text-right"><b>Username</b></td>
+									<td>{{user.username}}</td>
+								</tr>
+								<tr>
+									<td class="col-md-2 text-right"><b>E-mail</b></td>
+									<td>{{user.email}}</td>
+								</tr>
+							</div>
+						</table>
+						<table class="table table-hover">
+							<div class="box-header">
+								<h4 class="box-title"><b>Password</b></h4>
+								<div class="box-tools">
+									<a href="{{path_for('user.edit')}}?section=change_password">
+										<button type="button" class="btn btn-danger">Edit</button>
+									</a>
+								</div>
+							</div>
+							<div class="box-body table-responsive no-padding">
+								<tr>
+									<td class="col-md-2 text-right"><b>Password</b></td>
+									<td>Change Password</td>
+								</tr>
+							</div>
+						</table>
+						<table class="table table-hover">
+							<div class="box-header">
+								<h4 class="box-title"><b>Shipping Data</b></h4>
+								<div class="box-tools">
+									<a href="{{path_for('user.edit')}}?section=shipping_address">
+										<button type="button" class="btn btn-danger">Edit</button>
+									</a>
+								</div>
+							</div>
+							<div class="box-body table-responsive no-padding">
+								<tr>
+									<td class="col-md-2 text-right"><b>Name</b></td>
+									<td>{{user.name}}</td>
+								</tr>
+								<tr>
+									<td class="col-md-2 text-right"><b>Phone</b></td>
+									<td>{{user.phone}}</td>
+								</tr>
+								<tr>
+									<td class="col-md-2 text-right"><b>Address</b></td>
+									<td>{{user.address}}</td>
+								</tr>
+							</div>
+						</table>
+					</div>
+				</div>
+			</div>
+	</section>
+{% endblock %}

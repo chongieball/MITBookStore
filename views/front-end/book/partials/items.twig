@@ -1,0 +1,85 @@
+<div class="box-body">
+	<div class="col-md-2">
+		<div class="thumbnail">
+			<img src="{{base_url()}}/assets/uploads/books/{{data.image}}" alt="{{data.title}}" width="150px" height="150px">
+			<div class="caption">
+				<h4><b>{{data.title}}</b></h4>
+				{{data.price}}
+				<div class="pull-right">
+					<form action="#" method="POST">
+						<a data-toggle="modal" data-target="#{{data.id}}" title="Detail">
+							<button type="button" class="btn btn-info">
+								<i class="fa fa-search"></i>
+							</button>
+						</a>
+						<button name="cart" class="btn {{data.stock == 0 ? 'btn-danger' : 'btn-success'}}" value="{{data.id}}" {{data.stock == 0 ? 'disabled' : ''}}>
+							<i class="fa fa-shopping-cart"></i>
+						</button>
+					</form>
+				</div> 		
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="{{data.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<ul class="nav nav-stacked">
+					<li>
+						<div class="col-md-4">
+							<img src="{{base_url()}}/assets/uploads/books/{{data.image}}" alt="{{data.title}}" alt="{{data.title}}" width="225px" height="325px">
+						</div>
+						<div class="col-md-7 pull-right">
+							<table class="table table-hover">
+								<tr>
+									<td>
+										<b>{{data.isbn}}</b>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<b>{{data.title}}</b>
+										<div class="pull-right">
+											{{data.total_page}} Page(s)		
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>{{data.description}}</td>
+								</tr>
+								<tr>
+									<td>
+										{{data.author}}
+										<div class="pull-right">
+											{{data.publisher}}
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>{{data.category}}</td>
+								</tr>
+								<tr>
+									<td class="text-justify">{{data.synopsis}}
+									</td>
+								</tr>
+								<tr>
+									<td><h2><b>{{data.price}}</b></h2></td>
+								</tr>
+							</table>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+			 	<form action="#">
+			 		{% if data.stock == 0 %}
+			 			<span class="label label-danger">Out of Stock</span>
+			 		{% else %}
+			 		<button type="button" class="btn btn-primary" name="cart" value="{{data.id}}">Add to Cart</button>
+			 		{% endif %}
+			 	</form>
+			</div>
+		</div>
+	</div>
+</div>
