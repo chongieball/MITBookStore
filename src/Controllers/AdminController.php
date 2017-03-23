@@ -14,29 +14,33 @@ class AdminController extends BaseController
 		return $this->view->render($response, 'back-end/admin/home.twig');
 	}
 
-	public function getSignIn()
+	public function getSignIn(Request $request, Response $response)
 	{
+		if (!empty($_SESSION['admin'])) {
+			return $response->withRedirect($this->router->pathFor('admin.index'));
+		}
 		return $this->view->render($response, 'back-end/admin/login.twig');
 	}
 
-	public function postSignIn()
+	public function postSignIn(Request $request, Response $response)
 	{
 		$admin    = new Admin($this->db);
-		$email    = $request->getParam('email');
+		$username = $request->getParam('username');
 		$password = $request->getParam('password');
-		$check 	  = $admin->find('email', $email);
+		$check 	  = $admin->find('username', $username);
 		$verify   = password_verify($password, $check['password']);
 
 		if (!$verify) {
+			$_SESSION['errors'][] = 'Username/Password is Wrong';
 			return $response->withRedirect($this->router->pathFor('admin.signin'));
 		}
 
 
 		$_SESSION['admin'] = $check;
-		return $response->withRedirect($this->router->pathFor('admin.home'));
+		return $response->withRedirect($this->router->pathFor('admin.index'));
 	}
 
-	public function getChangePassword()
+	public function getChangePassword(Request $request, Response $response)
 	{
 		return $this->view->render($response, 'back-end/admin/changepassword.twig');
 
@@ -52,7 +56,7 @@ class AdminController extends BaseController
 		$verify   = password_verify($request->getParam('password_old'), $password);
 
 		if (!$verify) {
-      $_SESSION['errors']['password'][] = 'Your Old Password is Wrong';
+      $_SESSION['errors'][] = 'Your Old Password is Wrong';
 			return $response->witRedirect($this->router->pathFor('admin.change.password'));
 
 		} else {
@@ -61,10 +65,9 @@ class AdminController extends BaseController
     return $response->withRedirect($this->router->pathFor('admin.home'));
 	}
 
-	public function signOut()
+	public function Logout(Request $request,Response $response)
 	{
 		unset($_SESSION['admin']);
+		return $response->withRedirect($this->router->pathFor('admin.login'));
 	}
-
-
 }

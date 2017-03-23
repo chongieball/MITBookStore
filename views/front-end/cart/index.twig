@@ -1,0 +1,65 @@
+{% extends 'front-end/app.twig' %}
+
+{% block title %}Cart - MIT Book Store{% endblock %}
+{% block nav %}
+    {% include 'front-end/partials/navuser.twig' %}
+{% endblock %}
+
+{% block content %}
+	<section class="content">
+		{% include 'templates/partials/flash.twig'%}
+		<div class="row">
+			<div class="col-md-8">
+				{% if basket.itemCount %}
+					<div class="well">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Image</th>
+									<th>Title</th>
+									<th>Price</th>
+									<th>Quantity</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for item in basket.all %}
+									<tr>
+										<td><img src="{{base_url()}}/upload/{{item.image}}" alt="{{item.title}}" width="100px" height="150px"/></td>
+										<td>{{item.title}}</td>
+										<td>{{item.price | number_format(2)}} IDR</td>
+										<td>{{item.qty}} (temp)</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				{% else %}
+					<p>You have no items in your cart. <a href="{{path_for('home')}}">Start Shopping</a></p>	    
+				{% endif %}
+			</div>
+			<div class="col-md-4">
+				{% if basket.itemCount and basket.subTotal %}
+					<div class="well">
+						<h4>Cart Summary</h4>
+						<hr>
+						<table class="table">
+							<tr>
+								<td>Total Qty</td>
+								<td>{{basket.totalQty}}</td>
+							</tr>
+							<tr>
+								<td>Sub Total</td>
+								<td>{{basket.subTotal | number_format}} IDR</td>
+							</tr>
+							<tr>
+								<td class="info">Total</td>
+								<td class="info">{{basket.subTotal | number_format}} IDR</td>
+							</tr>
+						</table>
+						<a href="#" class="btn btn-default">Checkout</a>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</section>
+{% endblock %}

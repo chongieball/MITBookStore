@@ -19,6 +19,7 @@ abstract class BaseModel
             ->select($this->column)
             ->from($this->table)
             ->where('deleted =0');
+
         $result = $this->db->execute();
         return $result->fetchAll();
 	}
@@ -28,26 +29,29 @@ abstract class BaseModel
 	{
 		$param = ':'.$column;
 		$this->db
-		    ->select($this->column)
-				->from($this->table)
-				->where($column . ' = '. $param. ' AND deleted = 0')
-				->setParameter($param, $value);
+		     ->select($this->column)
+			 ->from($this->table)
+			 ->where($column . ' = '. $param. ' AND deleted = 0')
+			 ->setParameter($param, $value);
+
 		$result = $this->db->execute();
 		return $result->fetch();
 	}
 
 	public function create(array $data)
 	{
-	    $columns = [];
-	    $paramData = [];
-	    foreach ($data as $key => $value) {
-	    	$columns[$key] = ':'.$key;
-	    	$paramData[$key] = $value;
-	    }
-	    $this->db->insert($this->table)
-	        ->values($columns)
-	        ->setParameters($paramData)
-	        ->execute();
+		$column = [];
+		$paramData = [];
+
+		foreach ($data as $key => $value) {
+			$column[$key] = ':'.$key;
+			$paramData[$key] = $value;
+		}
+
+		$this->db->insert($this->table)
+				->values($column)
+				->setParameters($paramData)
+				->execute();
 	}
 
 	//conditional edit
@@ -61,42 +65,50 @@ abstract class BaseModel
 	    	$paramData[$key] = $values;
 	    	$this->db->set($key, $columns[$key]);
 	    }
-	    $this->db->where( $column.'='. $value)
-	        ->setParameters($paramData)
-	        ->execute();
+
+	    $this->db
+	    	 ->where( $column.'='. $value)
+	         ->setParameters($paramData);
+	    return $this->db->execute();
 	}
 
 	//conditional delete
 	public function softDelete($column, $value)
 	{
-	    $this->db->update($this->table)
-	             ->set('deleted', 1)
+	    $this->db
+	    	 ->update($this->table)
+	         ->set('deleted', 1)
 	         ->where($column. '=' . $value)
 	         ->execute();
 	}
 
 	public function showAll()
 	{
-	    $this->db->select($this->column)
+	    $this->db
+	    	 ->select($this->column)
 	         ->from($this->table);
+
 	    $result = $this->db->execute();
 	    return $result->fetchAll();
 	}
 
 	public function restore($id)
 	{
-	    $this->db->update($this->table)
-	             ->set('deleted', 0)
+	    $this->db
+	    	 ->update($this->table)
+	         ->set('deleted', 0)
 	         ->where('id = ' . $id)
 	         ->execute();
 	}
 
 	public function delete($id)
 	{
-	    $this->db->delete($this->table)
+	    $this->db
+	    	 ->delete($this->table)
 	         ->where('id = ' . $id)
 	         ->execute();
 	}
+	
     public  function __destruct()
     {
 

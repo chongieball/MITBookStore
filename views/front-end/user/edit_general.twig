@@ -1,0 +1,52 @@
+{% extends 'front-end/app.twig' %}
+
+{% block nav %}
+    {% include 'front-end/partials/navuser.twig' %}
+{% endblock %}
+
+{% block title %} Setting Account - MIT Book Store {% endblock %}
+
+{% block content %}
+    	<section class="content-header">
+    		<h1>Setting Account</h1>
+    		<ol class="breadcrumb">
+        		<li><a href="{{path_for('home')}}"><i class="fa fa-home"></i>Home Page</a></li>
+        		<li><a href="{{path_for('user.account')}}">My Account</a></li>
+        		<li class="active">Setting Account</li>
+      		</ol>
+    	</section>
+    	<section class="content">
+    		{% include 'templates/partials/flash.twig'%}
+    		<div class="row">
+    			<div class="col-xs-12">
+    				<div class="box box-primary">
+    					<div class="box-header">
+							<h4><b>General</b></h4>
+						</div>
+						<form action="{{path_for('user.edit')}}?section=general" method="POST">
+							<div class="box-body">
+								<div class="pull-left col-md-5">
+									<div class="form-group {{ errors.email ? 'has-error' : ''}}">
+										<label for="email">Email</label>
+										<input type="text" name="email" id="email" class="form-control" value="{{ user.email ? user.email : old.email }}">
+										{% if errors.email %}
+											<span class="help-block">{{errors.email | first}}</span>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							<div class="box-footer">
+								<div class="pull-right">
+									<button class="btn btn-success">Save</button>
+									<a href="{{path_for('user.account')}}">
+										<button type="button" class="btn btn-primary">Back</button>
+									</a>
+								</div>
+							</div>
+							{{csrf.field | raw}}
+						</form>
+    				</div>
+    			</div>
+    		</div>
+    	</section>
+{% endblock %}
