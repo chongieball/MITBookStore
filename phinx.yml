@@ -16,10 +16,10 @@ environments:
 
     development:
         adapter: mysql
-        host: localhost
-        name: framework1
+        host: chongieball
+        name: mbs
         user: root
-        pass: '13136767'
+        pass: poikoiloi@
         port: 3306
         charset: utf8
 

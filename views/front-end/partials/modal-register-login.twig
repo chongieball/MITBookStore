@@ -9,12 +9,11 @@
                 </div>
                 <div class="modal-body">  
                     <div class="box1">
-                        {% include 'templates/partials/flash.twig'%}
-                            {% if errors.0 %}
-                        		<div class="alert alert-danger">
-                        			{{errors.0}}
-                        		</div>
-                        	{% endif %}
+                        {% if errors.0 %}
+                        	<div class="alert alert-danger">
+                        		{{errors.0}}
+                        	</div>
+                        {% endif %}
                             <div class="form loginBox">
                                 <form method="post" action="{{path_for('user.login')}}" accept-charset="UTF-8">
                                     <input id="username" class="form-control" type="text" placeholder="Username" name="username">

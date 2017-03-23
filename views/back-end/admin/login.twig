@@ -1,4 +1,4 @@
-{% extends 'templates/app.twig' %}
+{% extends 'back-end/app.twig' %}
 
 {% block title %} Login Admin - MIT Book Store 	{% endblock %}
 
@@ -7,18 +7,16 @@
 {% endblock %}
 
 {% block content %}
-	<center>
-    <div class="login">
-		<header class="login-header"><span class="text">MBS</span><span class="loader"></span></header>
-		<form class="login-form">
-	    	<input class="login-input" type="text" placeholder="Username"/>
-	    	<input class="login-input" type="password" placeholder="Password"/>
-	    	<button class="login-btn">login</button>
-	  	</form>
-	</div>
-	</center> 
-{% endblock %}
-
-{% block script %}
-    <script src="{{base_url()}}/assets/js/loginadmin.js"></script>
+<form class="form-signin" action="{{path_for('admin.login')}}" method="POST">
+	{% if errors.0 %}
+        <div class="alert alert-danger">
+            {{errors.0}}
+        </div>
+    {% endif %}       
+    <h2 class="form-signin-heading">MBS</h2>
+    	<input type="text" class="form-control" name="username" placeholder="Username">
+      	<input type="password" class="form-control" name="password" placeholder="Password">      
+      	<button class="btn btn-lg btn-primary btn-block">Login</button>
+      	{{csrf.field | raw}}
+    </form>
 {% endblock %}

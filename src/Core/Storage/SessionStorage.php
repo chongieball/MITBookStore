@@ -7,9 +7,9 @@ use Countable;
 
 class SessionStorage implements StorageInterface, Countable
 {
-	protected $bucket = 'cart';
+	protected $bucket;
 
-	public function __construct($bucket = null)
+	public function __construct($bucket = 'cart')
 	{
 		if (!isset($_SESSION[$bucket])) {
 			$_SESSION[$bucket] = [];
@@ -25,11 +25,16 @@ class SessionStorage implements StorageInterface, Countable
 
 	public function get($index)
 	{
-		if (!isset($_SESSION[$this->bucket][$index])) {
+		if (!$this->exists($index)) {
 			return null;
 		}
 
 		return $_SESSION[$this->bucket][$index];
+	}
+
+	public function exists($index)
+	{
+		return isset($_SESSION[$this->bucket][$index]);
 	}
 
 	public function all()
@@ -39,7 +44,7 @@ class SessionStorage implements StorageInterface, Countable
 
 	public function unset($index)
 	{
-		if (isset($_SESSION[$this->bucket][$index]))
+		if ($this->exists($index))
 		{
 			unset($_SESSION[$this->bucket][$index]);
 		}
