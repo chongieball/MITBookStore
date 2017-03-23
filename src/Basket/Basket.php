@@ -16,7 +16,7 @@ class Basket
 		$this->book = $book;
 	}
 
-	public function add(Book $book, $qty)
+	public function add($book, $qty = 1)
 	{
 		if ($this->has($book)) {
 			$qty = $this->get($book)['qty'] + $qty;
@@ -25,34 +25,25 @@ class Basket
 		$this->update($book, $qty);
 	}
 
-	public function update(Book $book,$qty)
+	public function update($book,$qty = 1)
 	{
-		// if ($this->book->find('id', $book['id'])['stock'] === 0) {
-			
-		// }
-
-		if ($qty === 0) {
-			$this->remove($book);
-			return;
-		}
-
 		$this->storage->set($book['id'], [
 			'book_id'	=> (int) $book['id'],
 			'qty'		=> (int) $qty,
 		]);
 	}
 
-	public function remove(Book $book)
+	public function remove($book)
 	{
 		$this->storage->unset($book['id']);
 	}
 
-	public function has(Book $book)
+	public function has($book)
 	{
-		return $this->storage->get($book);
+		return $this->storage->exists($book['id']);
 	}
 
-	public function get(Book $book)
+	public function get($book)
 	{
 		return $this->storage->get($book['id']);
 	}
@@ -73,18 +64,45 @@ class Basket
 			$qty[] = $book['qty'];
 		}
 
-		$books = $this->book->find($ids);
+		if (!empty($ids)) {
+			$books = $this->book->getIdWhereIn($ids);
 
-		foreach ($books as $book) {
-			$book->qty = $this->get($product)['qty'];
-			$items[] = $product;
+			foreach ($books as $book) {
+				$book['qty'] = $this->get($book)['qty'];
+				$items[] = $book;
+			}
 		}
-
+		
 		return $items;
 	}
 
 	public function itemCount()
 	{
 		return count($this->storage);
+	}
+
+	public function subTotal()
+	{
+		$total = 0;
+
+		foreach ($this->all() as $item) {
+			if ($item['stock'] === 0) {
+				continue;
+			}
+
+			$total = $total + $item['price'] * $item['qty'];
+		}
+		return $total;
+	}
+
+	public function totalQty()
+	{
+		$total = 0;
+
+		foreach ($this->all() as $item) {
+			$total = $total + $item['qty'];
+		}
+
+		return $total;
 	}
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use Slim\Container;
 use Slim\Views\Twig as View;
@@ -13,6 +13,8 @@ $container['db'] = function (Container $container) {
 
 	$connect = \Doctrine\DBAL\DriverManager::getConnection($setting['db'],
 		$config);
+
+	// return $connect;
 
 	return $connect->createQueryBuilder();
 };
@@ -29,7 +31,7 @@ $container['view'] = function (Container $container) {
 		$view->getEnvironment()->addGlobal('old', $_SESSION['old']);
 		unset($_SESSION['old']);
 	}
-	
+
 	if ($_SESSION['errors']) {
 		$view->getEnvironment()->addGlobal('errors', $_SESSION['errors']);
 		unset($_SESSION['errors']);
@@ -45,13 +47,22 @@ $container['view'] = function (Container $container) {
 	
 	$view->getEnvironment()->addGlobal('basket', $container->basket);
 
+	if (isset($_SESSION['old'])) {
+		$view->getEnvironment()->addGlobal('old', $_SESSION['old']);
+		unset($_SESSION['old']);
+	}
+
+	if (isset($_SESSION['errors'])) {
+		$view->getEnvironment()->addGlobal('errors', $_SESSION['errors']);
+		unset($_SESSION['errors']);
+	}
 	return $view;
 };
 
 $container['validator'] = function (Container $container) {
 	$setting = $container->get('settings')['lang']['default'];
 	$params = $container['request']->getParams();
-	
+
 	return new Valitron\Validator($params, [], $setting);
 };
 

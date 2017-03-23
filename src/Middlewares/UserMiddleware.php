@@ -24,13 +24,7 @@ class UserMiddleware extends BaseMiddleware
 		// }
 
 		$response = $next($request, $response);
-
-		if (!empty($_SESSION['user'])) {
-				// $_SESSION['user'] = [];
-				$user = new User($this->container->db);
-				$find = $_SESSION['user'];
-				$_SESSION['user'] = $user->find('id', $_SESSION['user']['id']);
-			}
+		
 		unset($_SESSION['url']);
 
 		return $response;

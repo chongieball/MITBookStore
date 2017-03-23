@@ -1,11 +1,11 @@
-<?php 
+<?php
 
 return [
 	//setting display error
 	'displayErrorDetails'	=> true,
 
 	'addContentLengthHeader' => false,
-	
+
 	//setting timezone
 	'timezone'	=> 'Asia/Jakarta',
 
@@ -16,7 +16,7 @@ return [
 
 	//setting db (with doctrine)
 	'db'	=> [
-		'url'	=> 'mysql://root:poikoiloi@@chongieball/mbs',
+		'url'	=> 'mysql://root:poikoiloi@@localhost/mbs',
 	],
 
 	//setting view (using twig)
