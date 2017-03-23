@@ -16,14 +16,16 @@ return [
 
 	//setting db (with doctrine)
 	'db'	=> [
-		'url'	=> 'mysql://root:root@localhost/book_store_dev_db',
+		'url'	=> 'mysql://root:poikoiloi@@localhost/mbs',
 	],
 
 	//setting view (using twig)
 	'view'	=> [
-		'path'	=> '../views',
+		'path'	=> __DIR__. '/../views',
 		'twig'	=> [
 			'cache'	=> false,
 			],
 	],
+
+	'determineRouteBeforeAppMiddleware' => true,
 ];

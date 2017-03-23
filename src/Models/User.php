@@ -17,6 +17,14 @@ class User extends BaseModel
 			$this->create($data);
 	}
 
+	public function changePassword(array $data, $column, $value)
+	{
+		$data = [
+			'password' => password_hash($data['new_password'], PASSWORD_BCRYPT),
+			];
+		$this->update($data, $column, $value);
+	}
+
 	public function checkDuplicate($username, $email)
 	{
 		$checkUsername = $this->find('username', $username);

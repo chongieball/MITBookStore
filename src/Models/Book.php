@@ -4,13 +4,22 @@ namespace MBS\Models;
 
 class Book extends BaseModel
 {
-    protected $table   = 'book';
-
+	protected $table   = 'book';
     protected $column  = ['`id`, `publisher_id`, `isbn`, `title`, `description`,
                         `publish_year`,`total_page`, `synopsis`, `images`, `price`, `stock`'];
-
     protected $columns = ['b.id', 'b.publisher_id', 'b.isbn','b.title',
                         'b.description','b.publish_year', 'b.total_page', 'b.synopsis','b.images', 'b.price', 'b.stock', 'p.name AS name_publisher'];
+
+	public function getIdWhereIn($ids)
+	{
+		if (!empty($ids)) {
+			$this->db->select($this->column)
+					 ->from($this->table)
+					 ->where('id IN (' . implode(',', $ids) . ')');
+			$result = $this->db->execute();
+			return $result->fetchAll();
+		}
+	}
 
     public function add(array $data, $images)
     {
@@ -60,14 +69,4 @@ class Book extends BaseModel
         $result = $this->db->execute();
         return $result->fetch();
     }
-
-//     public function coba($id)
-//     {
-//         $qr = "SELECT book.title as book, author.name AS author, category.name as category FROM book JOIN author_book ON book.id=author_book.book_id JOIN category_book ON book.id=category_book.book_id INNER JOIN author ON author.id=author_book.author_id JOIN category ON category.id=category_book.category_id WHERE book.id=".$id;
-//         $stmt = $this->db->prepare($qr);
-// // $stmt->bindValue(1, $id);
-// $stmt->execute();
-// return $stmt->fetchAll();
-//     }
-
 }

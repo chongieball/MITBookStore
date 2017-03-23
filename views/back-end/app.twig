@@ -13,13 +13,13 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/alt/AdminLTE-select2.min.css">
 		<link rel="stylesheet" href="{{base_url()}}/assets/adminlte/plugins/select2/select2.min.css">
-		<link rel="stylesheet" href="{#{{base_url()}}#}/assets/adminlte/dist/css/AdminLTE.min.css">
+		<link rel="stylesheet" href="{{base_url()}}/assets/adminlte/dist/css/AdminLTE.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/skins/_all-skins.min.css">
 		<!-- <link rel="stylesheet" href="{#{{base_url()}}#}/assets/adminlte/dist/css/skins/skin-blue.min.css"> -->
 		{#for additional style in assets#}
 		{% block style %}{% endblock %}
 	</head>
-	<body class="hold-transition skin-blue sidebar-mini">
+	<body class="hold-transition fixed skin-blue sidebar-mini">
 		{% block nav %} {% endblock %}
 		<!-- <div class="wrapper"> -->
 			{% block content %}{% endblock %}
@@ -46,9 +46,5 @@ $(function() {
 	$(".select2").select2();
 });
 </script>
-
-{#for additional js in assets#}
-{% block js %}{% endblock %}
-
 {#for additional js in the file#}
 {% block script %} {% endblock %}

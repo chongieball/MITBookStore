@@ -10,15 +10,15 @@
       	<div class="navbar-custom-menu">
       		<ul class="nav navbar-nav">
       			<li class="dropdown user user-menu">
-      				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      				<a href="{{path_for('admin.change_password')}}" class="dropdown-toggle" data-toggle="dropdown">
       					<span class="hidden-xs">Admin</span>
            			</a>
            			<ul class="dropdown-menu">
            				<li class="user-footer">
-				                <a href="#" class="btn btn-default btn-flat">Change Password</a>
+				                <a href="{{path_for}}" class="btn btn-default btn-flat">Change Password</a>
 				        </li>
 				        <li class="user-footer">
-				               	<a href="#" class="btn btn-default btn-flat">Sign out</a>
+				               	<a href="{{path_for('admin.logout')}}" class="btn btn-default btn-flat">Sign out</a>
 				        </li>
 				    </ul>
 				</li>
@@ -30,9 +30,8 @@
 	<section class="sidebar">
 		<ul class="sidebar-menu">
 			<li class="header"><h4><i class="fa fa-dashboard"></i> Menu</h4></li>
-    	</ul>
 			<li class="treeview">
-			  <a href="#">
+			  <a style="cursor:pointer">
 				<i class="fa fa-book"></i>
 				<span>Book</span>
 				<span class="pull-right-container">
@@ -40,8 +39,8 @@
 				</span>
 			  </a>
 			  <ul class="treeview-menu">
-				<li><a href="{{path_for('book.index')}}"><i class="fa fa-circle-o"></i> Data</a></li>
-				<li><a href="{{path_for('book.arsip')}}"><i class="fa fa-circle-o"></i> Arsip</a></li>
+				<li><a href="{{path_for('book.index')}}"><i class="fa fa-circle-o"></i>Data</a></li>
+				<li><a href="{{path_for('book.arsip')}}"><i class="fa fa-circle-o"></i>Arsip</a></li>
 			  </ul>
 		  	</li>
 			<li class="treeview">
@@ -83,7 +82,6 @@
 				<li><a href="{{path_for('publisher.arsip')}}"><i class="fa fa-circle-o"></i> Arsip</a></li>
 			  </ul>
 		  	</li>
-
     </ul>
     </section>
 </aside>
