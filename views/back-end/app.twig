@@ -12,7 +12,8 @@
 		<link rel="stylesheet" href="{{base_url()}}/assets/adminlte/plugins/datatables/dataTables.bootstrap.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/alt/AdminLTE-select2.min.css">
-		<!-- <link rel="stylesheet" href="{#{{base_url()}}#}/assets/adminlte/dist/css/AdminLTE.min.css"> -->
+		<link rel="stylesheet" href="{{base_url()}}/assets/adminlte/plugins/select2/select2.min.css">
+		<link rel="stylesheet" href="{#{{base_url()}}#}/assets/adminlte/dist/css/AdminLTE.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/skins/_all-skins.min.css">
 		<!-- <link rel="stylesheet" href="{#{{base_url()}}#}/assets/adminlte/dist/css/skins/skin-blue.min.css"> -->
 		{#for additional style in assets#}
@@ -33,6 +34,19 @@
 <script src="{{base_url()}}/assets/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="{{base_url()}}/assets/adminlte/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="{{base_url()}}/assets/adminlte/plugins/selectize/selectize.min.js"></script>
+<script src="{{base_url()}}/assets/adminlte/plugins/select2/select2.full.min.js"></script>
+<script>
+$(document).ready(function() {
+$('#example').DataTable();
+} );
+</script>
+<script>
+$(function() {
+	    //Initialize Select2 Elements
+	$(".select2").select2();
+});
+</script>
+
 {#for additional js in assets#}
 {% block js %}{% endblock %}
 
