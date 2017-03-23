@@ -31,5 +31,59 @@
 		<ul class="sidebar-menu">
 			<li class="header"><h4><i class="fa fa-dashboard"></i> Menu</h4></li>
     	</ul>
+			<li class="treeview">
+			  <a href="#">
+				<i class="fa fa-book"></i>
+				<span>Book</span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-left pull-right"></i>
+				</span>
+			  </a>
+			  <ul class="treeview-menu">
+				<li><a href="{{path_for('book.index')}}"><i class="fa fa-circle-o"></i> Data</a></li>
+				<li><a href="{{path_for('book.arsip')}}"><i class="fa fa-circle-o"></i> Arsip</a></li>
+			  </ul>
+		  	</li>
+			<li class="treeview">
+			  <a href="#">
+				<i class="fa fa-book"></i>
+				<span>Author</span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-left pull-right"></i>
+				</span>
+			  </a>
+			  <ul class="treeview-menu">
+				<li><a href="{{path_for('author.index')}}"><i class="fa fa-circle-o"></i> Data</a></li>
+				<li><a href="{{path_for('author.arsip')}}"><i class="fa fa-circle-o"></i> Arsip</a></li>
+			  </ul>
+		  	</li>
+			<li class="treeview">
+			  <a href="#">
+				<i class="fa fa-book"></i>
+				<span>Category</span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-left pull-right"></i>
+				</span>
+			  </a>
+			  <ul class="treeview-menu">
+				<li><a href="{{path_for('category.index')}}"><i class="fa fa-circle-o"></i> Data</a></li>
+				<li><a href="{{path_for('category.arsip')}}"><i class="fa fa-circle-o"></i> Arsip</a></li>
+			  </ul>
+		  	</li>
+			<li class="treeview">
+			  <a href="#">
+				<i class="fa fa-book"></i>
+				<span>Publisher</span>
+				<span class="pull-right-container">
+				  <i class="fa fa-angle-left pull-right"></i>
+				</span>
+			  </a>
+			  <ul class="treeview-menu">
+				<li><a href="{{path_for('publisher.index')}}"><i class="fa fa-circle-o"></i> Data</a></li>
+				<li><a href="{{path_for('publisher.arsip')}}"><i class="fa fa-circle-o"></i> Arsip</a></li>
+			  </ul>
+		  	</li>
+
+    </ul>
     </section>
 </aside>
