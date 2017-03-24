@@ -35,7 +35,7 @@ class BookController extends BaseController
         $authorBooks = $authorBook->findAuthor('book_id', $args['id']);
         $author = new \MBS\Models\Author($this->db);
         foreach ($authorBooks as $val) {
-            $authors = $author->find('id', $val['author_id']);
+            $authors = $author->findNotDelete('id', $val['author_id']);
             $name_author[] = $authors['name'];
         }
         $data['author'] = $name_author;
@@ -137,7 +137,7 @@ class BookController extends BaseController
     public function getUpdate(Request $request, Response $response, $args)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->find('id', $args['id']);
+        $data['table'] = $book->findNotDelete('id', $args['id']);
 
         return $this->view->render($response, 'back-end/book/update.twig', $data);
     }
@@ -173,7 +173,7 @@ class BookController extends BaseController
     public function getChange(Request $request, Response $response, $args)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->find('id', $args['id']);
+        $data['table'] = $book->findNotDelete('id', $args['id']);
         return $this->view->render($response, 'back-end/book/change.twig', $data);
     }
 
@@ -242,7 +242,7 @@ class BookController extends BaseController
 
         $book = new \MBS\Models\Book($this->db);
 
-        $find = $book->find('id', $request->getParam('id'));
+        $find = $book->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $book->softDelete('id', $request->getParam('id'));
@@ -259,7 +259,7 @@ class BookController extends BaseController
 
         $book = new \MBS\Models\Book($this->db);
 
-        $find = $book->find('id', $request->getParam('id'));
+        $find = $book->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $book->delete($request->getParam('id'));
@@ -276,7 +276,7 @@ class BookController extends BaseController
 
         $book = new \MBS\Models\Book($this->db);
 
-        $find = $book->find('id', $request->getParam('id'));
+        $find = $book->findNotDelete('id', $request->getParam('id'));
         $_SESSION['restore'] = $find;
 
         $delete = $book->restore($request->getParam('id'));

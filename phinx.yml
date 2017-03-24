@@ -16,10 +16,10 @@ environments:
 
     development:
         adapter: mysql
-        host: chongieball
-        name: mbs
+        host: localhost
+        name: book_store_dev_db
         user: root
-        pass: poikoiloi@
+        pass: root
         port: 3306
         charset: utf8
 

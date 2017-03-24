@@ -52,7 +52,7 @@ class PublisherController extends BaseController
     public function getUpdate(Request $request, Response $response, $args)
     {
         $publisher = new \MBS\Models\Publisher($this->db);
-        $data['table'] = $publisher->find('id', $args['id']);
+        $data['table'] = $publisher->findNotDelete('id', $args['id']);
         return $this->view->render($response, 'back-end/publisher/update.twig', $data);
     }
 
@@ -88,7 +88,7 @@ class PublisherController extends BaseController
 
         $publisher = new \MBS\Models\Publisher($this->db);
 
-        $find = $publisher->find('id', $request->getParam('id'));
+        $find = $publisher->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $publisher->softDelete('id', $request->getParam('id'));
@@ -105,7 +105,7 @@ class PublisherController extends BaseController
 
         $publisher = new \MBS\Models\Publisher($this->db);
 
-        $find = $publisher->find('id', $request->getParam('id'));
+        $find = $publisher->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $publisher->delete($request->getParam('id'));
@@ -122,7 +122,7 @@ class PublisherController extends BaseController
 
         $publisher = new \MBS\Models\Publisher($this->db);
 
-        $find = $publisher->find('id', $request->getParam('id'));
+        $find = $publisher->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $publisher->restore($request->getParam('id'));
