@@ -16,7 +16,7 @@ return [
 
 	//setting db (with doctrine)
 	'db'	=> [
-		'url'	=> 'mysql://root:poikoiloi@@localhost/mbs',
+		'url'	=> 'mysql://root:root@localhost/book_store_dev_db',
 	],
 
 	//setting view (using twig)

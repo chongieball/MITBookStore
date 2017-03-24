@@ -52,7 +52,7 @@ class AuthorController extends BaseController
     public function getUpdate(Request $request, Response $response, $args)
     {
         $author = new \MBS\Models\Author($this->db);
-        $data['table'] = $author->find('id', $args['id']);
+        $data['table'] = $author->findNotDelete('id', $args['id']);
         return $this->view->render($response, 'back-end/author/update.twig', $data);
     }
 
@@ -88,7 +88,7 @@ class AuthorController extends BaseController
 
         $author = new \MBS\Models\Author($this->db);
 
-        $find = $author->find('id', $request->getParam('id'));
+        $find = $author->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $author->softDelete('id', $request->getParam('id'));
@@ -105,7 +105,7 @@ class AuthorController extends BaseController
 
         $author = new \MBS\Models\Author($this->db);
 
-        $find = $author->find('id', $request->getParam('id'));
+        $find = $author->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $author->delete($request->getParam('id'));
@@ -122,7 +122,7 @@ class AuthorController extends BaseController
 
         $author = new \MBS\Models\Author($this->db);
 
-        $find = $author->find('id', $request->getParam('id'));
+        $find = $author->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $author->restore($request->getParam('id'));
