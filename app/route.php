@@ -105,9 +105,6 @@ $app->group('/admin', function () use ($app,$namespace) {
 	$app->get('/publisher', $namespace.'\PublisherController:index')
     ->setName('publisher.index');
 
-	$app->get('/publisher', $namespace.'\PublisherController:index')
-        ->setName('publisher.index');
-
 	$app->get('/publisher/read/{term}', $namespace.'\PublisherController:readAjax')
             ->setName('publisher.read');
 
