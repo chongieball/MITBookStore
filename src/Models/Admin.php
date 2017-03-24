@@ -5,6 +5,7 @@ namespace MBS\Models;
 class Admin extends BaseModel
 {
     protected $table = 'admin';
+    protected $column = ['id', 'username', 'password'];
 
     public function setPassword($password, $id)
     {
@@ -12,7 +13,7 @@ class Admin extends BaseModel
             'password' => password_hash($password, PASSWORD_DEFAULT)
         ];
 
-        $this->updateData($data, $id);
+        // $this->update($);
     }
 }
 

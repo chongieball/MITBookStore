@@ -16,14 +16,16 @@ return [
 
 	//setting db (with doctrine)
 	'db'	=> [
-		'url'	=> 'mysql://root:poikoiloi@@chongieball/mbs',
+		'url'	=> 'mysql://root:poikoiloi@@localhost/mbs',
 	],
 
 	//setting view (using twig)
 	'view'	=> [
-		'path'	=> '../views',
+		'path'	=> __DIR__. '/../views',
 		'twig'	=> [
 			'cache'	=> false,
 			],
 	],
+
+	'determineRouteBeforeAppMiddleware' => true,
 ];

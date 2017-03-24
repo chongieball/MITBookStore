@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace MBS\Controllers;
 
@@ -18,5 +18,15 @@ abstract class BaseController
 		if ($this->container->{$property}) {
 			return $this->container->{$property};
 		}
+	}
+
+	//for delete CSRF value
+	public function delCsrfPost($post)
+	{
+		for ($i=0; $i < 2; $i++) { 
+			array_pop($post);
+		}
+
+		return $post;
 	}
 }

@@ -54,23 +54,27 @@ class UserController extends BaseController
 			$register = $user->checkDuplicate($request->getParam('username'), $request->getParam('email'));
 
 			if ($register == 1) {
-				$_SESSION['errors'][] = 'Username telah digunakan';
+				$_SESSION['errors'][] = 'Username is Taken';
 				return $response->withRedirect($this->router->pathFor('user.register'));
 			} elseif ($register == 2) {
-				$_SESSION['errors'][] = 'Email telah digunakan';
+				$_SESSION['errors'][] = 'Email is Taken';
 				return $response->withRedirect($this->router->pathFor('user.register'));
 			} else {
-				$user->register($request->getParams());
+				$register = $request->getParams();
+				$this->delCsrfPost($register);
+				$user->register($register);
+
+				$this->flash->addMessage('success', 'Register Success!');
 			}
 
 		} else {
-			$_SESSION['notice'] = $this->validator->errors();
+			$notice = array_reverse($this->validator->errors());
 
 			//when get error return old input
 			$_SESSION['old'] = $request->getParams();
 
 
-			foreach ($_SESSION['notice'] as $value) {
+			foreach ($notice as $value) {
 				$_SESSION['errors'] = $value;
 
 			}
@@ -84,8 +88,12 @@ class UserController extends BaseController
 
 	public function getLogin(Request $request, Response $response)
 	{
-		unset($_SESSION['user']);
-		return $this->view->render($response, 'front-end/user/login.twig');
+		if (empty($_SESSION['user'])) {
+			return $this->view->render($response, 'front-end/user/login.twig');
+		} else {
+			return $response->withRedirect($this->router->pathFor('home'));
+		}
+		
 	}
 
 	public function postLogin(Request $request, Response $response)
@@ -100,21 +108,178 @@ class UserController extends BaseController
 		} else {
 			if (password_verify($request->getParam('password'), $login['password'])) {
 				$_SESSION['user'] = $login;
-				return $response->withRedirect($this->router->pathFor('home'));
+
 			} else {
 				$_SESSION['errors'][] = 'Wrong Password';
 				return $response->withRedirect($this->router->pathFor('user.login'));
 			}
 		}
+		//redirect to current page
+		return $response->withRedirect($_SESSION['url']);
 
 	}
 
-	public function getProfile(Request $request, Response $response)
+	public function getLogout(Request $request, Response $response)
+	{
+		unset($_SESSION['user']);
+		return $response->withRedirect($this->router->pathFor('user.login'));
+	}
+
+	public function getAccount(Request $request, Response $response)
+	{
+		return $this->view->render($response, 'front-end/user/profile.twig');
+	}
+
+	public function getEdit(Request $request, Response $response)
+	{
+		if ($request->getQueryParam('section') == 'shipping_address') {
+			return $this->view->render($response, 'front-end/user/edit_shipping_address.twig');
+		} elseif ($request->getQueryParam('section') == 'change_password') {
+			return $this->view->render($response, 'front-end/user/edit_password.twig');
+		} elseif ($request->getQueryParam('section') == 'general') {
+			return $this->view->render($response, 'front-end/user/edit_general.twig');
+		}
+		return $response->withStatus(404);
+	}
+
+	public function postEdit(Request $request, Response $response)
 	{
 		$user = new User($this->db);
 
-		$data['data'] = $user->find('id', $_SESSION['user']['id']);
+		if ($request->getQueryParam('section') == 'shipping_address') {
+			$rules = [
+				'required'	=> [
+					['name'],
+					['phone'],
+					['address'],
+				],
+				'numeric'	=> [
+					['phone'],
+				],
+			];
 
-		return $this->view->render($response, 'user/profile', $data);
+			$this->validator->rules($rules);
+
+			$this->validator->labels([
+				'name'			=> 'Name',
+				'phone'			=> 'Phone',
+				'address'		=> 'Address',
+				]);
+
+			//validate 
+			if ($this->validator->validate()) {
+				$post = $this->delCsrfPost($request->getParsedBody());
+
+				$user->update($post, 'id', $_SESSION['user']['id']);
+
+			} else {
+				$_SESSION['errors'] = $this->validator->errors();
+
+				//when get error return old input
+				$_SESSION['old'] = $request->getParsedBody();
+
+				return $response->withRedirect($this->router->pathFor('user.edit')."?section=shipping_address");
+			}
+		} elseif ($request->getQueryParam('section') == 'change_password') {
+			$rules = [
+				'required'	=> [
+					['old_password'],
+					['new_password'],
+					['repeat_password'],
+				],
+				'equals'	=> [
+					['new_password', 'repeat_password'],
+				],
+			];
+
+			$this->validator->rules($rules);
+
+			$this->validator->labels([
+				'old_password'		=> 'Old Password',
+				'new_password'		=> 'New Password',
+				'repeat_password'	=> 'Repeat Password',
+			]);
+
+			//validate 
+			if ($this->validator->validate()) {
+				if (password_verify($request->getParam('old_password'), $_SESSION['user']['password'])) {
+					$password['password'] = $request->getParam('new_password');
+
+					$user->changePassword($password, 'id', $_SESSION['user']['id']);
+					
+				} else {
+					$_SESSION['errors']['old_password'][] = 'Old Password is Wrong';
+
+					return $response->withRedirect($this->router->pathFor('user.edit')."?section=change_password");
+				}
+				
+			} else {
+				$_SESSION['errors'] = $this->validator->errors();
+
+				//when get error return old input
+				$_SESSION['old'] = $request->getParsedBody();
+
+				return $response->withRedirect($this->router->pathFor('user.edit')."?section=change_password");
+			}
+		} elseif ($request->getQueryParam('section') == 'general') {
+			$rules = [ 
+				'email' => ['required', 'email'],
+			];
+			$this->validator->mapFieldsRules($rules);
+
+			if ($this->validator->validate()) {
+				$email['email'] = $request->getParam('email');
+
+				$user->update($email, 'id', $_SESSION['user']['id']);
+			} else {
+				$_SESSION['errors'] = $this->validator->errors();
+
+				//when get error return old input
+				$_SESSION['old'] = $request->getParsedBody();
+
+				return $response->withRedirect($this->router->pathFor('user.edit')."?section=change_password");
+			}
+		}
+		$this->flash->addMessage('success', 'Your Account Has Been Update');
+
+		return $response->withRedirect($this->router->pathFor('user.account'));
 	}
+
+	public function getResetPassword(Request $request, Response $response)
+	{
+		return $this->view->render($response, 'front-end/user/reset_password.twig');
+	}
+
+	public function postResetPassword(Request $request, Response $response)
+	{
+		$this->validator->rule('required', ['email', 'username']);
+		$this->validator->rule('email', 'email');
+
+		if ($this->validator->validate()) {
+			$user = new User($this->db);
+
+			$reset = $user->find('username', $request->getParam('username'));
+			if ($reset) {
+				if ($reset['email'] !== $request->getParam('email')) {
+					$_SESSION['errors']['email'][] = 'Email is Wrong';
+				} else {
+					$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    				$password = substr( str_shuffle( $chars ), 0, 6 );
+
+    				$resetPass['password'] = password_hash($password, PASSWORD_BCRYPT);
+
+    				// $user->update($resetPass, 'username', $request->getParam('username'));
+    				$this->flash->addMessage('success', 'Your Password is '. "<b>$password</b>. Please <a href='./login'>Login</a>");
+				}
+			} else {
+				$_SESSION['errors']['username'][] = 'Username is Wrong';
+			}
+		} else {
+			$_SESSION['errors'] = $this->validator->errors();
+
+		}
+
+		return $response->withRedirect($this->router->pathFor('user.reset_password'));
+	}
+
 }

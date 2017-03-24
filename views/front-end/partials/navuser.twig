@@ -5,18 +5,81 @@
     </a>
     <nav class="navbar navbar-static-top" role="navigation">
         <div class="navbar-custom-menu">
+            {% set no = basket.itemCount %}
             <ul class="nav navbar-nav">
+                <li class="dropdown messages-menu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="label label-success">{{no}}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if no > 0 %}
+                        <li class="header">You have {{no}} cart(s)</li>
+                        <li>
+                            {% set book = '' %}
+                            {% for item in basket.all %}
+                                {% set book = item %}
+                            {% endfor %}
+                            <ul class="menu">
+                                <li>
+                                    <div class="pull-left">
+                                        <img src="{{base_url()}}/upload/{{book.image}}" class="img-circle" alt="Cart Image" style="width:100px;height:100px">
+                                    </div>
+                                    <h4>
+                                        {{book.title}}<br/>
+                                        <small>{{book.qty}} qty</small>
+                                    </h4>
+                                    {% set total = book.qty * book.price %}
+                                    <p><b>{{total | number_format()}} IDR</b></p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="footer"><a href="{{path_for('cart.index')}}">See All Carts</a></li>
+                        {% else %}
+                        <li class="header">Your Cart is Empty</li>
+                        {% endif %}
+                    </ul>
+                </li>
                 {% if user %}
+                <li class="dropdown messages-menu">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="label label-success">4</span>
+                    </a>
+                    {% set no = 1 %}
+                    <ul class="dropdown-menu">
+                        {% if no == 1%}
+                        <li class="header">You have 4 cart(s)</li>
+                        <li>
+                            <ul class="menu">
+                                <li>
+                                    <div class="pull-left">
+                                        <img src="http://slaintemagazine.ie/wp-content/uploads/2015/02/Born-to-be-Beautiful-book-cover-186x300.jpg" class="img-circle" alt="User Image" style="width:100px;height:100px">
+                                    </div>
+                                    <h4>
+                                        Born To Be Beautiful<br/>
+                                        <small>5 qty</small>
+                                    </h4>
+                                    <p><b>300.000 IDR</b></p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="footer"><a href="{{path_for('cart.index')}}">See All Carts</a></li>
+                        {% else %}
+                        <li class="header">Your Cart is Empty</li>
+                        {% endif %}
+                    </ul>
+                </li>
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="hidden-xs">{{user.username}}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li class="user-footer">
-                                <a href="#" class="btn btn-default btn-flat">Change Password</a>
+                                <a href="{{path_for('user.account')}}" class="btn btn-default btn-flat">My Account</a>
                         </li>
                         <li class="user-footer">
-                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                <a href="{{path_for('user.logout')}}" class="btn btn-default btn-flat">Sign out</a>
                         </li>
                     </ul>
                 </li>
