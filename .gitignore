@@ -1,8 +1,3 @@
-<<<<<<< HEAD
 vendor/*
-phinx.yml
-=======
-/vendor
 composer.lock
 phinx.yml
->>>>>>> upstream/dev
