@@ -52,7 +52,7 @@ class CategoryController extends BaseController
     public function getUpdate(Request $request, Response $response, $args)
     {
         $category = new \MBS\Models\Category($this->db);
-        $data['table'] = $category->find('id', $args['id']);
+        $data['table'] = $category->findNotDelete('id', $args['id']);
         return $this->view->render($response, 'back-end/category/update.twig', $data);
     }
 
@@ -88,7 +88,7 @@ class CategoryController extends BaseController
 
         $category = new \MBS\Models\Category($this->db);
 
-        $find = $category->find('id', $request->getParam('id'));
+        $find = $category->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $category->softDelete('id', $request->getParam('id'));
@@ -105,7 +105,7 @@ class CategoryController extends BaseController
 
         $category = new \MBS\Models\Category($this->db);
 
-        $find = $category->find('id', $request->getParam('id'));
+        $find = $category->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $category->delete($request->getParam('id'));
@@ -122,7 +122,7 @@ class CategoryController extends BaseController
 
         $category = new \MBS\Models\Category($this->db);
 
-        $find = $category->find('id', $request->getParam('id'));
+        $find = $category->findNotDelete('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $category->restore($request->getParam('id'));
