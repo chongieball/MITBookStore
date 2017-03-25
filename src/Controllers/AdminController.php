@@ -37,7 +37,7 @@ class AdminController extends BaseController
 
 
 		$_SESSION['admin'] = $check;
-		return $response->withRedirect($this->router->pathFor('admin.index'));
+		return $response->withRedirect($_SESSION['url']);
 	}
 
 	public function getChangePassword(Request $request, Response $response)

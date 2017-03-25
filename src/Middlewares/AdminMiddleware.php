@@ -13,13 +13,7 @@ class AdminMiddleware extends BaseMiddleware
 			$_SESSION['errors'][] = 'You must Login to access that page';
 
 			return $response->withRedirect($this->container->router->pathFor('admin.login'));
-		 } //else {
-		// 	if (!empty($_SESSION['user'])) {
-		// 		$user = new User($this->container->db);
-		// 		$find = $user->find('id', $_SESSION['user']['id']);
-		// 		$_SESSION['user'] = $find;
-		// 	}
-		// }
+		 } 
 
 		$response = $next($request, $response);
 

@@ -42,13 +42,14 @@
   						<td>{{table.update_at}}</td>
   						<td>{{table.create_at}}</td>
   						<td>
-							<form class="" action="author/softdelete" method="post">
+							<form class="" action="{{path_for('author.index')}}" method="post">
 								<button name="id" value="{{table.id}}" class="btn btn-danger" title="Soft Delete">
 									<i class="fa fa-trash-o"></i>
 								</button>
-								<a href="author/update/{{table.id}}" class="btn btn-warning" title="Edit">
+								<a href="{{path_for('author.update', {('id'): table.id })}}" class="btn btn-warning" title="Edit">
 	  								<i class="fa fa-pencil"></i>
 	  							</a>
+                  {{ csrf.field | raw }}
 							</form>
   						</td>
   	                </tr>

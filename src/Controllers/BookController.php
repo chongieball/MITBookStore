@@ -4,12 +4,6 @@ namespace MBS\Controllers;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use MBS\Models\Book;
-use MBS\Models\Publisher;
-use MBS\Models\AuthorBook;
-use MBS\Models\Author;
-use MBS\Models\CategoryBook;
-use MBS\Models\Category;
 
 class BookController extends BaseController
 {
@@ -17,47 +11,39 @@ class BookController extends BaseController
     public function index(Request $request, Response $response)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->allJoin(0);
+        $data['table'] = $book->getAll();
         return $this->view->render($response, 'back-end/book/index.twig', $data);
     }
 
     public function arsip(Request $request, Response $response)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->allJoin(1);
+        $data['table'] = $book->getArchive();
         return $this->view->render($response, 'back-end/book/arsip.twig', $data);
     }
 
     public function detail(Request $request, Response $response, $args)
     {
-
-        $authorBook = new \MBS\Models\AuthorBook($this->db);
-        $authorBooks = $authorBook->findAuthor('book_id', $args['id']);
-        $author = new \MBS\Models\Author($this->db);
-        foreach ($authorBooks as $val) {
-            $authors = $author->findNotDelete('id', $val['author_id']);
-            $name_author[] = $authors['name'];
-        }
-        $data['author'] = $name_author;
-
-        // $categoryBook = new \MBS\Models\CategoryBook($this->db);
-        // $categoryBooks = $categoryBook->findCategory('book_id', $args['id']);
-        // $category = new \MBS\Models\Category($this->db);
-        // foreach ($categoryBooks as $vale) {
-        //     $categorys = $category->find('id', $vale['category_id']);
-        //     $name_category[] = $categorys['name'];
-        // }
-        // $data['category'] = $name_category;
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->allDetail($args['id']);
+        $data['book'] = $book->allDetail($args['id'], 0);
 
-        // $book = new \MBS\Models\Book($this->db);
-        // $data = $book->coba($args['id']);
-        // foreach ($data as $key => $value) {
-        //     $data[$key] = $value['author'];
-        // }
-                // var_dump($data);
-                // $data['table'] = $book->allDetail($args['id']);
+        $author = new \MBS\Models\Author($this->db);
+        $authorBook = $author->showAuthorBook($args['id']);
+        if ($authorBook) {
+            foreach ($authorBook as $value) {
+                $ab[] = implode('', $value);
+            }
+            $data['author'] = implode(', ', $ab);
+        }
+
+        $category = new \MBS\Models\Category($this->db);
+        $categoryBook = $category->showCategoryBook($args['id']);
+        if ($categoryBook) {
+            foreach ($categoryBook as $value) {
+                $cb[] = implode('', $value);
+            }
+            $data['category'] = implode(', ', $cb);
+        }
 
         return $this->view->render($response, 'back-end/book/detail.twig', $data);
     }
@@ -66,18 +52,15 @@ class BookController extends BaseController
     {
 
         $publisher= new \MBS\Models\Publisher($this->db);
-        $data['table'] = $publisher->allJoin(0);
+        $data['table'] = $publisher->getAll();
         return $this->view->render($response, 'back-end/book/add.twig', $data);
     }
 
     public function postAdd(Request $request, Response $response)
     {
+        $file = new \Upload\File('images', $this->upload);
 
-        $storage = new \Upload\Storage\FileSystem('assets/images');
-        $file = new \Upload\File('images', $storage);
-
-        $new_filename = uniqid();
-        $file->setName($new_filename);
+        $file->setName(uniqid());
 
         $file->addValidations(array(
 
@@ -96,18 +79,39 @@ class BookController extends BaseController
             'dimensions' => $file->getDimensions()
         );
 
-        $this->validator->rule('required', ['publisher_id', 'isbn', 'title',
-            'description', 'publish_year', 'total_page', 'synopsis',
-            'price', 'stock'])->message('{field} Must Not Empty');
+        $rules = [
+            'required'  => [
+                ['isbn'],
+                ['title'],
+                ['description'],
+                ['publish_year'],
+                ['total_page'],
+                ['synopsis'],
+                ['price'],
+            ],
+            'numeric'   => [
+                ['isbn'],
+                ['publish_year'],
+                ['total_page'],
+                ['price'],
+                ['stock'],
+            ],
+            'lengthMax' => [
+                ['isbn', 13],
+                ['title', 200],
+                ['description', 400],
+                ['publish_year', 4],
+                ['synopsis', 1200],
+            ],
+        ];
+        $this->validator->rules($rules);
 
         if ($this->validator->validate()) {
-
             $book = new \MBS\Models\Book($this->db);
             if ($file->upload()) {
                 $book->add($request->getParams(), $data['name']);
                 $this->flash->addMessage('success', 'Add Data Success');
             } else {
-
                 $errors = $file->getErrors();
                 $error = print_r($errors);
                 $_SESSION['errors'] = $this->validator->errors();
@@ -116,8 +120,7 @@ class BookController extends BaseController
 
                 $this->flash->addMessage('errors', $error);
 
-                return $response->withRedirect($this->router
-                    ->pathFor('book.add'));
+                return $response->withRedirect($this->router->pathFor('book.add'));
             }
 
         } else {
@@ -126,33 +129,55 @@ class BookController extends BaseController
 
             $_SESSION['old'] = $request->getParams();
 
-            return $response->withRedirect($this->router
-                ->pathFor('book.add'));
+            return $response->withRedirect($this->router->pathFor('book.add'));
         }
 
-        return $response->withRedirect($this->router
-        ->pathFor('book.index'));
+        return $response->withRedirect($this->router->pathFor('book.index'));
     }
 
     public function getUpdate(Request $request, Response $response, $args)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->findNotDelete('id', $args['id']);
+        $data['table'] = $book->allDetail($args['id'], 0);
+        $publisher = new \MBS\Models\Publisher($this->db);
+        $data['publisher'] = $publisher->getAll();
 
         return $this->view->render($response, 'back-end/book/update.twig', $data);
     }
 
     public function postUpdate(Request $request, Response $response, $args)
     {
-        $this->validator->rule('required', ['publisher_id', 'isbn', 'title',
-            'description', 'publish_year', 'total_page', 'synopsis',
-            'price', 'stock'])->message('{field} Must Not Empty');
+
+        $rules = [
+            'required'  => [
+                ['isbn'],
+                ['title'],
+                ['description'],
+                ['publish_year'],
+                ['total_page'],
+                ['synopsis'],
+                ['price'],
+            ],
+            'numeric'   => [
+                ['isbn'],
+                ['publish_year'],
+                ['total_page'],
+                ['price'],
+                ['stock'],
+            ],
+            'lengthMax' => [
+                ['isbn', 13],
+                ['title', 200],
+                ['description', 400],
+                ['publish_year', 4],
+                ['synopsis', 1200],
+            ],
+        ];
+        $this->validator->rules($rules);
 
         if ($this->validator->validate()) {
-
             $book = new \MBS\Models\Book($this->db);
-
-            $book->update($request->getParams(),'id', $args['id']);
+            $book->bookUpdate($request->getParams(), 'id', $args['id']);
 
             $this->flash->addMessage('success', 'Edit Data Success');
 
@@ -179,7 +204,7 @@ class BookController extends BaseController
 
     public function postChange(Request $request, Response $response, $args)
     {
-        $storage = new \Upload\Storage\FileSystem('assets/images');
+        $storage = new \Upload\Storage\FileSystem('upload');
         $file = new \Upload\File('images', $storage);
 
         $new_filename = uniqid();
@@ -207,7 +232,7 @@ class BookController extends BaseController
             $book = new \MBS\Models\Book($this->db);
             if ($file->upload()) {
                 $book->changeImage($data['name'],'id', $args['id']);
-                $this->flash->addMessage('success', 'Add Data Success');
+                $this->flash->addMessage('success', 'Edit Data Success');
 
             } else {
 
@@ -242,7 +267,7 @@ class BookController extends BaseController
 
         $book = new \MBS\Models\Book($this->db);
 
-        $find = $book->findNotDelete('id', $request->getParam('id'));
+        $find = $book->find('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $book->softDelete('id', $request->getParam('id'));
@@ -259,7 +284,7 @@ class BookController extends BaseController
 
         $book = new \MBS\Models\Book($this->db);
 
-        $find = $book->findNotDelete('id', $request->getParam('id'));
+        $find = $book->find('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $book->delete($request->getParam('id'));
@@ -276,7 +301,7 @@ class BookController extends BaseController
 
         $book = new \MBS\Models\Book($this->db);
 
-        $find = $book->findNotDelete('id', $request->getParam('id'));
+        $find = $book->find('id', $request->getParam('id'));
         $_SESSION['restore'] = $find;
 
         $delete = $book->restore($request->getParam('id'));

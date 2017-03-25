@@ -26,7 +26,7 @@
             <!-- /.box-header -->
             <div class="box-body">
 
-<form role="form" action="{{path_for('book.post.category', {('id'):id})}}" method="GET">
+<form role="form" action="{{path_for('book.add.category', {('id'):id})}}" method="POST">
 
   <!-- input states -->
   <div class="form-group {{ errors.category_id ? 'has-error' : '' }}">
@@ -50,7 +50,7 @@
   </div>
 
 <button type="submit" class="btn btn-primary">Submit</button>
-
+{{ csrf.field |raw }}
 </form>
 
 

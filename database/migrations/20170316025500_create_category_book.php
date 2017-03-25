@@ -30,8 +30,8 @@ class CreateCategoryBook extends AbstractMigration
         $categoryBook = $this->table('category_book', ['id' => false]);
         $categoryBook->addColumn('book_id', 'integer')
                      ->addColumn('category_id', 'integer')
-                     ->addForeignKey('book_id', 'book', 'id')
-                     ->addForeignKey('category_id', 'category', 'id')
+                     ->addForeignKey('book_id', 'book', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
+                     ->addForeignKey('category_id', 'category', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
                      ->create();
     }
 }

@@ -25,7 +25,7 @@
             <!-- /.box-header -->
             <div class="box-body">
 
-<form role="form" action="{{path_for('book.postupdate', {('id'):table.id})}}" method="post">
+<form role="form" action="{{path_for('book.update', {('id'):table.id})}}" method="post">
 
   <!-- input states -->
   <div class="form-group {{ errors.publisher_id ? 'has-error' : '' }}">
@@ -35,13 +35,14 @@
 	</label>
 	<select class="form-control select2" style="width: 100%;" name="publisher_id"
 	id="publisher_id" >
+    <option value="0">Select Publisher</option> 
 
-	{% if table.publisher_id %}
-	  <option selected="selected" value="{{table.id}}">{{old.publisher_id ? old.publisher_id : table.publisher_id}}</option>
-	{% endif %}
-
-	{% for tablex in table_publisher %}
-	  <option value="{{tablex.id}}">{{tablex.name}}</option>
+	{% for tablex in publisher %}
+    {% if table.publisher_id == tablex.id %}
+        <option value="{{tablex.id}}" selected>{{tablex.name}}</option>
+    {% else %}
+        <option value="{{tablex.id}}">{{tablex.name}}</option>
+    {% endif %}
 	{% endfor %}
 	</select>
 
@@ -139,7 +140,7 @@
   </div>
 
 <button type="submit" class="btn btn-primary">Submit</button>
-
+{{csrf.field | raw }}
 </form>
 
 

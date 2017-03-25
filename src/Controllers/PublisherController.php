@@ -11,14 +11,14 @@ class PublisherController extends BaseController
     public function index(Request $request, Response $response)
     {
         $publisher= new \MBS\Models\Publisher($this->db);
-        $data['table'] = $publisher->allJoin(0);
+        $data['table'] = $publisher->getAll();
         return $this->view->render($response, 'back-end/publisher/index.twig', $data);
     }
 
     public function arsip(Request $request, Response $response)
     {
         $publisher= new \MBS\Models\Publisher($this->db);
-        $data['table'] = $publisher->allJoin(1);
+        $data['table'] = $publisher->getArchive();
         return $this->view->render($response, 'back-end/publisher/arsip.twig', $data);
     }
 
@@ -29,21 +29,19 @@ class PublisherController extends BaseController
 
     public function postAdd(Request $request, Response $response)
     {
-      $this->validator->rule('required', ['name'])
-          ->message('{field} Must Not Empty');
+        $this->validator->rule('required', ['name'])->message('{field} Must Not Empty');
 
-      if ($this->validator->validate()) {
+        if ($this->validator->validate()) {
+            $name['name'] = $request->getParam('name');
+            $publisher = new \MBS\Models\Publisher($this->db);
+            $publisher->create($name);
+            $this->flash->addMessage('success', 'Add Data Success');
 
-          $publisher = new \MBS\Models\Publisher($this->db);
-          $publisher->create($request->getParams());
-          $this->flash->addMessage('success', 'Add Data Success');
-
-      } else {
-          $_SESSION['errors'] = $this->validator->errors();
-          $_SESSION['old'] = $request->getParams();
-          return $response->withRedirect($this->router
-              ->pathFor('publisher.add'));
-      }
+        } else {
+            $_SESSION['errors'] = $this->validator->errors();
+            $_SESSION['old'] = $request->getParams();
+            return $response->withRedirect($this->router->pathFor('publisher.add'));
+        }
 
         return $response->withRedirect($this->router
           ->pathFor('publisher.index'));
@@ -58,14 +56,13 @@ class PublisherController extends BaseController
 
     public function postUpdate(Request $request, Response $response, $args)
     {
-        $this->validator->rule('required',['name'])
-            ->message('{field} Must Not Empty');
+        $this->validator->rule('required',['name']);
 
         if ($this->validator->validate()) {
-
+            $name['name'] = $request->getParam('name');
             $publisher = new \MBS\Models\Publisher($this->db);
 
-            $publisher->update($request->getParams(),'id', $args['id']);
+            $publisher->update($name,'id', $args['id']);
 
             $this->flash->addMessage('success', 'Edit Data Success');
 
@@ -122,7 +119,7 @@ class PublisherController extends BaseController
 
         $publisher = new \MBS\Models\Publisher($this->db);
 
-        $find = $publisher->findNotDelete('id', $request->getParam('id'));
+        $find = $publisher->find('id', $request->getParam('id'));
         $_SESSION['delete'] = $find;
 
         $delete = $publisher->restore($request->getParam('id'));

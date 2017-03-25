@@ -31,7 +31,6 @@
 					<tr>
 						<th>ISBN</th>
 						<th>Title</th>
-						<th>Publisher</th>
 						<th>Publish Year</th>
 						<th>Images</th>
 						<th>Price</th>
@@ -44,14 +43,10 @@
 	                <tr>
 						<td>{{table.isbn}}</td>
 						<td>{{table.title}}</td>
-						<td>{{table.name_publisher}}</td>
 						<td>{{table.publish_year}}</td>
 						<td>
 						<center>
-							<img src="{{base_url()}}/assets/images/{{table.images}}" alt="" width="100px" height="120px"><br>
-						<a href="{{path_for('book.change', {('id'):table.id})}}" class="btn btn-info btn-sm" title="Change Images">
-								Change Images
-							</a>
+							<img src="{{base_url()}}/upload/{{table.images}}" alt="" width="100px" height="120px"><br>
 						</center>
 						</td>
 						<td>{{table.price}}</td>
@@ -69,6 +64,7 @@
 								<a href="book/detail/{{table.id}}" class="btn btn-success" title="Detail">
 									<i class="fa fa-th-list"></i>
 								</a>
+								{{csrf.field | raw}}
 							</form>
 						</td>
 	                </tr>

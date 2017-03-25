@@ -2,7 +2,7 @@
 {% block title %} Admin Page - MIT Book Store {% endblock %}
 
 {% block nav %}
-	{% include 'templates/partials/navadmin.twig' %}
+	{% include 'back-end/partials/navadmin.twig' %}
 {% endblock %}
 
 {% block content %}
@@ -42,7 +42,7 @@
 					<td>{{table.create_at}}</td>
 					<td>{{table.update_at}}</td>
 					<td>
-						<form class="" action="publisher/softdelete" method="post">
+						<form class="" action="{{path_for('publisher.index')}}" method="post">
 							<button name="id" value="{{table.id}}" class="btn btn-danger" title="Soft Delete">
 								<i class="fa fa-trash-o"></i>
 							</button>
@@ -50,6 +50,7 @@
 							<a href="publisher/update/{{table.id}}" class="btn btn-warning" title="Edit">
 								<i class="fa fa-pencil"></i>
 							</a>
+							{{ csrf.field | raw }}
 						</form>
 					</td>
 				</tr>

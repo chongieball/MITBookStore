@@ -2,7 +2,7 @@
 {% block title %} Admin Page - MIT Book Store {% endblock %}
 
 {% block nav %}
-	{% include 'templates/partials/navadmin.twig' %}
+	{% include 'back-end/partials/navadmin.twig' %}
 {% endblock %}
 
 {% block content %}
@@ -32,7 +32,7 @@
 					<th>Name</th>
 					<th>Create at</th>
 					<th>Update at</th>
-					<th>Hapus<br>Permanent</th>
+					<th>Delete Permanent</th>
 					<th>Restore</th>
 				</tr>
 			</thead>
@@ -47,6 +47,7 @@
 							<button name="id" value="{{table.id}}" class="btn btn-danger" title="Delete Permanent">
 								<i class="fa fa-trash-o"></i>
 							</button>
+							{{ csrf.field |raw }}
 						</form>
 					</td>
 					<td>
@@ -54,6 +55,7 @@
 							<button name="id" value="{{table.id}}" class="btn btn-warning" title="Restore">
 								<i class="fa fa-reply"></i>
 							</button>
+							{{ csrf.field |raw }}
 						</form>
 					</td>
 				</tr>

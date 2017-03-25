@@ -3,6 +3,8 @@
 use Slim\Container;
 use Slim\Views\Twig as View;
 use Slim\Views\TwigExtension as ViewExt;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
 
 $container = $app->getContainer();
 
@@ -14,9 +16,9 @@ $container['db'] = function (Container $container) {
 	$connect = \Doctrine\DBAL\DriverManager::getConnection($setting['db'],
 		$config);
 
-	// return $connect;
+	return $connect;
 
-	return $connect->createQueryBuilder();
+	// return $connect->createQueryBuilder();
 };
 
 $container['view'] = function (Container $container) {
@@ -83,4 +85,9 @@ $container['basket'] = function (Container $container) {
 		$container->session, 
 		new MBS\Models\Book($container->db)
 	);
+};
+
+$container['upload'] = function (Container $container) {
+	$setting = $container->get('settings')['uploadPath'];
+	return new \Upload\Storage\FileSystem($setting);
 };

@@ -14,9 +14,9 @@
 		    <ol class="breadcrumb">
 		        <li><a href="{{ path_for('book.index')}}"><i class="fa fa-book"></i>Book</a></li>
 		    </ol>
+      </section>
+      <section class="content">
 			{% include 'templates/partials/flash.twig' %}
-    	</section>
-			<section class="content">
 				<div class="box">
             <div class="box-header">
               <h3 class="box-title">
@@ -26,7 +26,7 @@
             <!-- /.box-header -->
             <div class="box-body">
 
-<form role="form" action="postadd" method="post" enctype="multipart/form-data">
+<form role="form" action="{{path_for('book.add')}}" method="post" enctype="multipart/form-data">
 
   <!-- input states -->
   <div class="form-group {{ errors.publisher_id ? 'has-error' : '' }}">
@@ -36,9 +36,7 @@
 	</label>
 	<select class="form-control select2" style="width: 100%;" name="publisher_id"
 	id="publisher_id" >
-	{% if old.publisher_id %}
-	  <option selected="selected">{{old.publisher_id}}</option>
-	{% endif %}
+    <option value="0">Select Publisher</option>
 	{% for table in table %}
 	  <option value="{{table.id}}">{{table.name}}</option>
 	{% endfor %}
@@ -120,7 +118,7 @@
 	   {{ errors.images ? '<i class="fa fa-times-circle-o"></i>': ''}}
 		Images (<i class="text-danger">*.jpg, *.png, *.gif</i>)
    </label>
-	<input type="file" name="images" class="form-control" id="images" value="{{old.images}}" required="">
+	<input type="file" name="images" class="form-control" id="images" value="{{old.images}}">
    {% if errors.images %}
 	<span class="help-block">{{ errors.images | first }}</span>
    {% endif %}
@@ -149,7 +147,7 @@
   </div>
 
 <button type="submit" class="btn btn-primary">Submit</button>
-
+{{ csrf.field |raw }}
 </form>
 
 
