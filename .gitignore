@@ -1,3 +1,4 @@
 /vendor
 composer.lock
 phinx.yml
+/public/assets/adminlte
