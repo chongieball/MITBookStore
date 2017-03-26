@@ -17,7 +17,7 @@ class AdminController extends BaseController
 	public function getSignIn(Request $request, Response $response)
 	{
 		if (!empty($_SESSION['admin'])) {
-			return $response->withRedirect($this->router->pathFor('admin.index'));
+		    return $response->withRedirect($this->router->pathFor('admin.index'));
 		}
 
 		return $this->view->render($response, 'back-end/admin/login.twig');
