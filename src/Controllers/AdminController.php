@@ -49,10 +49,10 @@ class AdminController extends BaseController
 
 	public function postChangePassword()
 	{
-		$admin    = new Admin($this->db);
-		$data     = $_SESSION['admin'];
-		$id	      = $_SESSION['admin']['id'];
-		$password = $_SESSION['admin']['password'];
+		$admin		= new Admin($this->db);
+		$data		= $_SESSION['admin'];
+		$id		  	= $_SESSION['admin']['id'];
+		$password 	= $_SESSION['admin']['password'];
 
 		$verify   = password_verify($request->getParam('password_old'), $password);
 
