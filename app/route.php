@@ -19,80 +19,68 @@ $app->group('/admin', function () use ($app,$namespace) {
 
 	$app->get('/change_password', $namespace. '\AdminController:getChangePassword')->setName('admin.change_password');
 
-	$app->get('/categorybook', $namespace.'\CategoryBookController:index')->setName('category.book.index');
+//----------------BOOK----------------------------
+	$app->get('/book', $namespace.'\BookController:index')->setName('book.index');
+	$app->get('/book/arsip', $namespace.'\BookController:arsip')->setName('book.arsip');
 
-    $app->get('/authorbook', $namespace.'\AuthorBookController:index')
-        ->setName('author.book.index');
+	$app->get('/book/add', $namespace.'\BookController:getAdd')->setName('book.add');
+	$app->post('/book/add', $namespace.'\BookController:postAdd');
 
-    $app->get('/book/detail/author/{id}', $namespace.'\AuthorBookController:getAdd')->setName('book.add.author');
+	$app->post('/book/softdelete', $namespace.'\BookController:softDelete');
 
-    $app->get('/book/detail/author/post/{id}', $namespace.'\AuthorBookController:postAdd')->setName('book.post.author');
-
-    $app->get('/book/detail/category/{id}', $namespace.'\CategoryBookController:getAdd')->setName('book.add.category');
-
-    $app->get('/book/detail/category/post/{id}', $namespace.'\CategoryBookController:postAdd')->setName('book.post.category');
-// -----------------------------------------------------------------------------
-    $app->get('/book', $namespace.'\BookController:index')->setName('book.index');
+	$app->get('/book/update/{id}', $namespace.'\BookController:getUpdate')->setName('book.update');
+	$app->post('/book/update/{id}', $namespace.'\BookController:postUpdate');
 
 	$app->get('/book/detail/{id}', $namespace.'\BookController:detail')->setName('book.detail');
 
-	$app->get('/book/arsip', $namespace.'\BookController:arsip')->setName('book.arsip');
+	$app->get('/book/detail/author/{id}', $namespace.'\AuthorController:getAddAuthorInBook')->setName('book.add.author');
+	$app->post('/book/detail/author/{id}', $namespace.'\AuthorController:postAddAuthorInBook');
 
-	$app->get('/book/arsip/', $namespace.'\BookController:arsip')
-        ->setName('book.arsip');
+	$app->get('/book/detail/category/{id}', $namespace.'\CategoryController:getAddCategoryInBook')->setName('book.add.category');
+    $app->post('/book/detail/category/{id}', $namespace.'\CategoryController:postAddCategoryInBook');
 
-	$app->get('/book/add', $namespace.'\BookController:getAdd')
-        ->setName('book.add');
+	$app->get('/categorybook', $namespace.'\CategoryBookController:getAdd')->setName('category.book.index');
 
-	$app->post('/book/postadd', $namespace.'\BookController:postAdd');
-
-	$app->post('/book/softdelete', $namespace.'\BookController:softDelete');
+    $app->get('/authorbook', $namespace.'\AuthorBookController:index')
+        ->setName('author.book.index');
+// -----------------------------------------------------------------------------
+    
 
 	$app->post('/book/delete', $namespace.'\BookController:hardDelete')->setName('book.delete');
 
 	$app->post('/book/restore', $namespace.'\BookController:restore')->setName('book.restore');
 
-	$app->get('/book/update/{id}', $namespace.'\BookController:getUpdate')->setName('book.update');
+	$app->get('/book/image/{id}', $namespace.'\BookController:getChange')->setName('book.change');
 
-	$app->post('/book/postupdate/{id}', $namespace.'\BookController:postUpdate')->setName('book.postupdate');
-
-	$app->get('/book/change/{id}', $namespace.'\BookController:getChange')->setName('book.change');
-
-	$app->post('/book/postchange/{id}', $namespace.'\BookController:postChange')
-        ->setName('book.postchange');
+	$app->post('/book/image/{id}', $namespace.'\BookController:postChange');
 // -----------------------------------------------------------------------------
 	$app->get('/category', $namespace.'\CategoryController:index')->setName('category.index');
+	$app->post('/category', $namespace.'\CategoryController:softDelete');
 
 	$app->get('/category/arsip', $namespace.'\CategoryController:arsip')->setName('category.arsip');
-
-	$app->get('/category/arsip/', $namespace.'\CategoryController:arsip')->setName('category.arsip');
 
 	$app->get('/category/add', $namespace.'\CategoryController:getAdd')
         ->setName('category.add');
 
-	$app->post('/category/postadd', $namespace.'\CategoryController:postAdd');
-
-	$app->post('/category/softdelete', $namespace.'\CategoryController:softDelete');
-
-	$app->post('/category/delete', $namespace.'\CategoryController:hardDelete')
-        ->setName('category.delete');
-
-	$app->post('/category/restore', $namespace.'\CategoryController:restore')
-        ->setName('category.restore');
+	$app->post('/category/add', $namespace.'\CategoryController:postAdd');
 
 	$app->get('/category/update/{id}', $namespace.'\CategoryController:getUpdate')->setName('category.update');
+	$app->post('/category/update/{id}', $namespace.'\CategoryController:postUpdate');
 
-	$app->post('/category/postupdate/{id}', $namespace.'\CategoryController:postUpdate')->setName('category.postupdate');
+	$app->post('/category/archive/delete', $namespace.'\CategoryController:hardDelete')
+        ->setName('category.delete');
+
+	$app->post('/category/archive/restore', $namespace.'\CategoryController:restore')
+        ->setName('category.restore');
 // -----------------------------------------------------------------------------
 	$app->get('/author', $namespace.'\AuthorController:index')->setName('author.index');
+	$app->post('/author', $namespace.'\AuthorController:softDelete');
 
-	$app->get('/author/arsip/', $namespace.'\AuthorController:arsip')->setName('author.arsip');
+	$app->get('/author/arsip', $namespace.'\AuthorController:arsip')->setName('author.arsip');
 
 	$app->get('/author/add', $namespace.'\AuthorController:getAdd')->setName('author.add');
+	$app->post('/author/add', $namespace.'\AuthorController:postAdd');
 
-	$app->post('/author/postadd', $namespace.'\AuthorController:postAdd');
-
-	$app->post('/author/softdelete', $namespace.'\AuthorController:softDelete');
 
 	$app->post('/author/delete', $namespace.'\AuthorController:hardDelete')->setName('author.delete');
 
@@ -100,16 +88,15 @@ $app->group('/admin', function () use ($app,$namespace) {
 
 	$app->get('/author/update/{id}', $namespace.'\AuthorController:getUpdate')->setName('author.update');
 
-	$app->post('/author/postupdate/{id}', $namespace.'\AuthorController:postUpdate')->setName('author.postupdate');
+	$app->post('/author/update/{id}', $namespace.'\AuthorController:postUpdate');
 // -----------------------------------------------------------------------------
 	$app->get('/publisher', $namespace.'\PublisherController:index')
     ->setName('publisher.index');
+	$app->post('/publisher', $namespace.'\PublisherController:softDelete');
 
-	$app->get('/publisher', $namespace.'\PublisherController:index')
-        ->setName('publisher.index');
-
-	$app->get('/publisher/read/{term}', $namespace.'\PublisherController:readAjax')
-            ->setName('publisher.read');
+	$app->get('/publisher/add', $namespace.'\PublisherController:getAdd')
+        ->setName('publisher.add');
+	$app->post('/publisher/add', $namespace.'\PublisherController:postAdd');
 
 	$app->get('/publisher/arsip', $namespace.'\PublisherController:arsip')
         ->setName('publisher.arsip');
@@ -117,23 +104,12 @@ $app->group('/admin', function () use ($app,$namespace) {
 	$app->get('/publisher/arsip/', $namespace.'\PublisherController:arsip')
         ->setName('publisher.arsip');
 
-	$app->get('/publisher/add', $namespace.'\PublisherController:getAdd')
-        ->setName('publisher.add');
+	$app->post('/publisher/archive/delete', $namespace.'\PublisherController:hardDelete')->setName('publisher.delete');
 
-	$app->post('/publisher/postadd', $namespace.'\PublisherController:postAdd');
+	$app->post('/publisher/archive/restore', $namespace.'\PublisherController:restore')->setName('publisher.restore');
 
-	$app->post('/publisher/softdelete', $namespace.'\PublisherController:softDelete');
-
-	$app->post('/publisher/delete', $namespace.'\PublisherController:hardDelete')
-        ->setName('publisher.delete');
-
-	$app->post('/publisher/restore', $namespace.'\PublisherController:restore')
-        ->setName('publisher.restore');
-
-	$app->get('/publisher/update/{id}', $namespace.'\PublisherController:getUpdate')
-        ->setName('publisher.update');
-	$app->post('/publisher/postupdate/{id}', $namespace.'\PublisherController:postUpdate')
-        ->setName('publisher.postupdate');
+	$app->get('/publisher/update/{id}', $namespace.'\PublisherController:getUpdate')->setName('publisher.update');
+	$app->post('/publisher/update/{id}', $namespace.'\PublisherController:postUpdate');
 })->add(new AdminMiddleware($container));
 
 //-------------------FOR USER

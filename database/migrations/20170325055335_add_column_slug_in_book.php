@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateAuthorBook extends AbstractMigration
+class AddColumnSlugInBook extends AbstractMigration
 {
     /**
      * Change Method.
@@ -27,11 +27,9 @@ class CreateAuthorBook extends AbstractMigration
      */
     public function change()
     {
-        $authorBook = $this->table('author_book', ['id' => false]);
-        $authorBook->addColumn('author_id', 'integer')
-                   ->addColumn('book_id', 'integer')
-                   ->addForeignKey('author_id', 'author', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
-                   ->addForeignKey('book_id', 'book', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
-                   ->create();
+        $book = $this->table('book');
+        $book->addColumn('slug', 'string', ['after' => 'title'])
+             ->addIndex('slug')
+             ->update();
     }
 }

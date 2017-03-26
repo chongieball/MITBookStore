@@ -1,9 +1,5 @@
 {% extends 'front-end/app.twig' %}
 
-{% block nav %}
-    {% include 'front-end/partials/navuser.twig' %}
-{% endblock %}
-
 {% block title %} MIT Book Store {% endblock %}
 
 {% block content %}
@@ -20,7 +16,7 @@
 							{% for book in book %}
 							<div class="col-md-2">
 								<div class="thumbnail">
-									<img src="{{base_url()}}/upload/{{book.image}}" alt="{{book.title}}" width="150px" height="150px">
+									<img src="{{base_url()}}/upload/{{book.images}}" alt="{{book.title}}" width="150px" height="150px">
 									<div class="caption">
 										<h4><b>{{book.title}}</b></h4>
 										{{book.price}} IDR

@@ -5,17 +5,23 @@ namespace MBS\Models;
 class Author extends BaseModel
 {
     protected $table = 'author';
-    protected $column = ['`id`, `name`, `update_at`, `create_at`, `deleted`'];
+    protected $column = ['id', 'name', 'create_at', 'deleted'];
 
-    public function allJoin($deleted)
+    public function showAuthorBook($bookId)
     {
-        $param = ':deleted';
-        $this->db->select($this->column)
-        ->from($this->table)
-        ->where('deleted ='.$param)
-        ->setParameter($param, $deleted);
-        $result = $this->db->execute();
-        return $result->fetchAll();
+        $param = ':book_id';
+        $ab = 'author_book';
+        $b = 'book';
+        $this->qb->select($this->column[1])
+                 ->from($this->table, 'a')
+                 ->join('a', $ab, 'ab', $this->column[0]. ' = ab.author_id')
+                 ->join('a', 'book', 'b', 'ab.book_id = b.id')
+                 ->where('ab.book_id = '. $param)
+                 ->setParameter($param, $bookId);
+                 // echo $this->qb->getSQL();
+        $execute = $this->qb->execute();
+        
+        return $execute->fetchAll();
     }
 
 }

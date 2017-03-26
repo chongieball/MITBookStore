@@ -28,7 +28,7 @@ class CreateBookTable extends AbstractMigration
     public function change()
     {
         $book = $this->table('book');
-        $book->addColumn('publisher_id', 'integer')
+        $book->addColumn('publisher_id', 'integer', ['null' => true])
              ->addColumn('isbn', 'string')
              ->addColumn('title', 'string')
              ->addColumn('desc', 'string')
@@ -42,7 +42,7 @@ class CreateBookTable extends AbstractMigration
              ->addColumn('create_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
              ->addColumn('deleted', 'integer', ['limit' => 1, 'default' => 0])
              ->addIndex(['isbn', 'title', 'publish_year'])
-             ->addForeignKey('publisher_id', 'publisher', 'id')
+             ->addForeignKey('publisher_id', 'publisher', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
              ->create();
     }
 }

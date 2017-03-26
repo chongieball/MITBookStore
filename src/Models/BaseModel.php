@@ -7,20 +7,22 @@ abstract class BaseModel
 	protected $table;
 	protected $column;
 	protected $db;
+	protected $qb;
 
     public function __construct($db)
 	{
         $this->db = $db;
+        $this->qb = $db->createQueryBuilder();
 	}
 
     public function getAll()
 	{
-        $this->db
+        $this->qb
             ->select($this->column)
             ->from($this->table)
             ->where('deleted =0');
 
-        $result = $this->db->execute();
+        $result = $this->qb->execute();
         return $result->fetchAll();
 	}
 
@@ -28,24 +30,24 @@ abstract class BaseModel
 	public function find($column, $value)
 	{
 		$param = ':'.$column;
-		$this->db
+		$this->qb
 		     ->select($this->column)
 			 ->from($this->table)
 			 ->where($column . ' = '. $param)
 			 ->setParameter($param, $value);
-		$result = $this->db->execute();
+		$result = $this->qb->execute();
 		return $result->fetch();
 	}
 
 	public function findNotDelete($column, $value)
 	{
 		$param = ':'.$column;
-		$this->db
+		$this->qb
 		     ->select($this->column)
 			 ->from($this->table)
 			 ->where($column . ' = '. $param. ' AND deleted = 0')
 			 ->setParameter($param, $value);
-		$result = $this->db->execute();
+		$result = $this->qb->execute();
 		return $result->fetch();
 	}
 
@@ -58,7 +60,7 @@ abstract class BaseModel
 			$paramData[$key] = $value;
 		}
 
-		$this->db->insert($this->table)
+		$this->qb->insert($this->table)
 				->values($column)
 				->setParameters($paramData)
 				->execute();
@@ -69,22 +71,22 @@ abstract class BaseModel
 	{
 	    $columns = [];
 	    $paramData = [];
-	    $this->db->update($this->table);
+	    $this->qb->update($this->table);
 	    foreach ($data as $key => $values) {
 	    	$columns[$key] = ':'.$key;
 	    	$paramData[$key] = $values;
-	    	$this->db->set($key, $columns[$key]);
+	    	$this->qb->set($key, $columns[$key]);
 	    }
-	    $this->db
+	    $this->qb
 	    	 ->where( $column.'='. $value)
 	         ->setParameters($paramData);
-	    return $this->db->execute();
+	    return $this->qb->execute();
 	}
 
 	//conditional delete
 	public function softDelete($column, $value)
 	{
-	    $this->db
+	    $this->qb
 	    	 ->update($this->table)
 	         ->set('deleted', 1)
 	         ->where($column. '=' . $value)
@@ -93,17 +95,17 @@ abstract class BaseModel
 
 	public function showAll()
 	{
-	    $this->db
+	    $this->qb
 	    	 ->select($this->column)
 	         ->from($this->table);
 
-	    $result = $this->db->execute();
+	    $result = $this->qb->execute();
 	    return $result->fetchAll();
 	}
 
 	public function restore($id)
 	{
-	    $this->db
+	    $this->qb
 	    	 ->update($this->table)
 	         ->set('deleted', 0)
 	         ->where('id = ' . $id)
@@ -112,14 +114,24 @@ abstract class BaseModel
 
 	public function delete($id)
 	{
-	    $this->db
+	    $this->qb
 	    	 ->delete($this->table)
 	         ->where('id = ' . $id)
 	         ->execute();
 	}
+
+	public function getArchive()
+	{
+		$this->qb->select($this->column)
+				 ->from($this->table)
+				 ->where('deleted = 1');
+		$result = $this->qb->execute();
+
+		return $result->fetchAll();
+	}
 	
     public  function __destruct()
     {
-
+    	$this->db->close();
     }
 }
