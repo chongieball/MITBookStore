@@ -12,6 +12,7 @@ class BookController extends BaseController
     {
         $book = new \MBS\Models\Book($this->db);
         $data['table'] = $book->getAll();
+
         return $this->view->render($response, 'back-end/book/index.twig', $data);
     }
 
@@ -19,6 +20,7 @@ class BookController extends BaseController
     {
         $book = new \MBS\Models\Book($this->db);
         $data['table'] = $book->getArchive();
+
         return $this->view->render($response, 'back-end/book/arsip.twig', $data);
     }
 
@@ -33,6 +35,7 @@ class BookController extends BaseController
             foreach ($authorBook as $value) {
                 $ab[] = implode('', $value);
             }
+
             $data['author'] = implode(', ', $ab);
         }
 
@@ -42,6 +45,7 @@ class BookController extends BaseController
             foreach ($categoryBook as $value) {
                 $cb[] = implode('', $value);
             }
+
             $data['category'] = implode(', ', $cb);
         }
 
@@ -63,10 +67,8 @@ class BookController extends BaseController
         $file->setName(uniqid());
 
         $file->addValidations(array(
-
-            new \Upload\Validation\Mimetype(array('image/png', 'image/gif',
-            'image/jpg', 'image/jpeg')),
-
+            new \Upload\Validation\Mimetype(array(
+                'image/png', 'image/gif','image/jpg', 'image/jpeg')),
             new \Upload\Validation\Size('5M')
         ));
 
@@ -104,6 +106,7 @@ class BookController extends BaseController
                 ['synopsis', 1200],
             ],
         ];
+
         $this->validator->rules($rules);
 
         if ($this->validator->validate()) {
@@ -188,17 +191,18 @@ class BookController extends BaseController
             $_SESSION['old'] = $request->getParams();
 
             return $response->withRedirect($this->router
-                ->pathFor('book.update', ['id' => $args['id']]));
+                            ->pathFor('book.update', ['id' => $args['id']]));
         }
 
         return $response->withRedirect($this->router
-                  ->pathFor('book.index'));
+                        ->pathFor('book.index'));
     }
 
     public function getChange(Request $request, Response $response, $args)
     {
         $book = new \MBS\Models\Book($this->db);
         $data['table'] = $book->findNotDelete('id', $args['id']);
+
         return $this->view->render($response, 'back-end/book/change.twig', $data);
     }
 
@@ -211,10 +215,8 @@ class BookController extends BaseController
         $file->setName($new_filename);
 
         $file->addValidations(array(
-
-            new \Upload\Validation\Mimetype(array('image/png', 'image/gif',
-            'image/jpg', 'image/jpeg')),
-
+            new \Upload\Validation\Mimetype(array(
+                'image/png', 'image/gif','image/jpg', 'image/jpeg')),
             new \Upload\Validation\Size('5M')
         ));
 
@@ -245,7 +247,7 @@ class BookController extends BaseController
                 $this->flash->addMessage('errors', $error);
 
                 return $response->withRedirect($this->router
-                    ->pathFor('book.chage'));
+                                ->pathFor('book.chage'));
             }
 
         } else {
@@ -255,11 +257,11 @@ class BookController extends BaseController
             $_SESSION['old'] = $request->getParams();
 
             return $response->withRedirect($this->router
-                ->pathFor('book.change'));
+                            ->pathFor('book.change'));
         }
 
         return $response->withRedirect($this->router
-        ->pathFor('book.index'));
+                        ->pathFor('book.index'));
     }
 
     public function softDelete(Request $request, Response $response)
@@ -272,11 +274,13 @@ class BookController extends BaseController
 
         $delete = $book->softDelete('id', $request->getParam('id'));
 
-        $this->flash->addMessage('info', $_SESSION['delete']['title'].' has been deleted');
+        $this->flash->addMessage('info', $_SESSION['delete']['title'].
+                                 ' has been deleted');
+
         unset($_SESSION['delete']);
 
         return $response->withRedirect($this->router
-                  ->pathFor('book.index'));
+                        ->pathFor('book.index'));
     }
 
     public function hardDelete(Request $request, Response $response)
@@ -289,11 +293,13 @@ class BookController extends BaseController
 
         $delete = $book->delete($request->getParam('id'));
 
-        $this->flash->addMessage('info', $_SESSION['delete']['title'].' has been deleted permanent');
+        $this->flash->addMessage('info', $_SESSION['delete']['title'].
+                                 ' has been deleted permanent');
+
         unset($_SESSION['delete']);
 
         return $response->withRedirect($this->router
-                  ->pathFor('book.arsip'));
+                        ->pathFor('book.arsip'));
     }
 
     public function restore(Request $request, Response $response)
@@ -306,10 +312,12 @@ class BookController extends BaseController
 
         $delete = $book->restore($request->getParam('id'));
 
-        $this->flash->addMessage('info', $_SESSION['restore']['title'].' has been restored');
+        $this->flash->addMessage('info', $_SESSION['restore']['title'].
+                                 ' has been restored');
+
         unset($_SESSION['delete']);
 
         return $response->withRedirect($this->router
-                  ->pathFor('book.arsip'));
+                        ->pathFor('book.arsip'));
     }
 }

@@ -8,7 +8,7 @@ use MBS\Models\Admin;
 
 class AdminController extends BaseController
 {
-  
+
 	public function index(Request $request, Response $response)
 	{
 		return $this->view->render($response, 'back-end/admin/home.twig');
@@ -17,8 +17,9 @@ class AdminController extends BaseController
 	public function getSignIn(Request $request, Response $response)
 	{
 		if (!empty($_SESSION['admin'])) {
-			return $response->withRedirect($this->router->pathFor('admin.index'));
+		    return $response->withRedirect($this->router->pathFor('admin.index'));
 		}
+
 		return $this->view->render($response, 'back-end/admin/login.twig');
 	}
 
@@ -31,38 +32,40 @@ class AdminController extends BaseController
 		$verify   = password_verify($password, $check['password']);
 
 		if (!$verify) {
-			$_SESSION['errors'][] = 'Username/Password is Wrong';
-			return $response->withRedirect($this->router->pathFor('admin.signin'));
+		    $_SESSION['errors'][] = 'Username/Password is Wrong';
+
+		    return $response->withRedirect($this->router->pathFor('admin.signin'));
 		}
 
-
 		$_SESSION['admin'] = $check;
+
 		return $response->withRedirect($_SESSION['url']);
 	}
 
 	public function getChangePassword(Request $request, Response $response)
 	{
 		return $this->view->render($response, 'back-end/admin/changepassword.twig');
-
 	}
 
 	public function postChangePassword()
 	{
-		$admin    = new Admin($this->db);
-		$data     = $_SESSION['admin'];
-		$id	      = $_SESSION['admin']['id'];
-		$password = $_SESSION['admin']['password'];
+		$admin		= new Admin($this->db);
+		$data		= $_SESSION['admin'];
+		$id		  	= $_SESSION['admin']['id'];
+		$password 	= $_SESSION['admin']['password'];
 
 		$verify   = password_verify($request->getParam('password_old'), $password);
 
 		if (!$verify) {
-      $_SESSION['errors'][] = 'Your Old Password is Wrong';
-			return $response->witRedirect($this->router->pathFor('admin.change.password'));
+        	$_SESSION['errors'][] = 'Your Old Password is Wrong';
+			
+		    return $response->witRedirect($this->router->pathFor('admin.change.password'));
 
 		} else {
-			$admin->setPassword($request->getParam('password'), $id);
+		    $admin->setPassword($request->getParam('password'), $id);
 		}
-    return $response->withRedirect($this->router->pathFor('admin.home'));
+        
+            return $response->withRedirect($this->router->pathFor('admin.home'));
 	}
 
 	public function Logout(Request $request,Response $response)

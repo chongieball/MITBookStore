@@ -11,11 +11,13 @@ class CategoryBook extends BaseModel
     {
         $param = ':'.$column;
         $this->db
-            ->select($this->column)
-                ->from($this->table)
-                ->where($column . ' = '. $param)
-                ->setParameter($param, $value);
-                $result = $this->db->execute();
+             ->select($this->column)
+             ->from($this->table)
+             ->where($column . ' = '. $param)
+             ->setParameter($param, $value);
+
+        $result = $this->db->execute();
+
         return $result->fetchAll();
     }
 
@@ -30,6 +32,7 @@ class CategoryBook extends BaseModel
                  ->setParameter($param, $bookId);
                  // echo $this->db->getSQL();
                  $result = $this->db->execute();
+                 
                  return $result->fetchAll();
     }
 

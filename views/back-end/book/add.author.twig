@@ -8,56 +8,58 @@
 {% block content %}
     <div class="content-wrapper">
     	<section class="content-header">
-    		<h1>
-				Add Author
-		    </h1>
+    		<h1>Add Author</h1>
 		    <ol class="breadcrumb">
-		        <li><a href="{{ path_for('book.index')}}"><i class="fa fa-book"></i>Book</a></li>
+		        <li><a href="{{ path_for('book.index')}}">
+					<i class="fa fa-book"></i>Book</a>
+				</li>
 		    </ol>
 			{% include 'templates/partials/flash.twig' %}
     	</section>
-			<section class="content">
-				<div class="box">
-            <div class="box-header">
-              <h3 class="box-title">
-  		        <a href="{{path_for('book.detail', {('id'):id})}}" class="btn btn-info"> Back</a>
-			  </h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
 
-<form role="form" action="{{path_for('book.add.author', {('id'):id})}}" method="POST">
+		<section class="content">
+			<div class="box">
+		        <div class="box-header">
+		            <h3 class="box-title">
+				        <a href="{{path_for('book.detail', {('id'):id})}}" class="btn btn-info"> Back</a>
+				    </h3>
+		        </div>
+        <!-- /.box-header -->
+		        <div class="box-body">
 
-  <!-- input states -->
-  <div class="form-group {{ errors.author_id ? 'has-error' : '' }}">
-    <label class="control-label" for="name">
-		{{ errors.author_id ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		 Author
-	</label>
-	<select class="form-control select2" style="width: 100%;" name="author_id"
-	id="author_id" >
-	{% if old.author_id %}
-	  <option selected="selected">{{old.author_id}}</option>
-	{% endif %}
-	{% for table in table %}
-	  <option value="{{table.id}}">{{table.name}}</option>
-	{% endfor %}
-	</select>
+					<form role="form" action="{{path_for('book.add.author', {('id'):id})}}" method="POST">
 
-	{% if errors.author_id %}
-    <span class="help-block">{{ errors.author_id | first }}</span>
-	{% endif %}
-  </div>
-
-<button type="submit" class="btn btn-primary">Submit</button>
-{{csrf.field | raw }}
-</form>
-
-
-            </div>
-        </div>
+					  <!-- input states -->
+						    <div class="form-group {{ errors.author_id ? 'has-error' : '' }}">
+							    <label class="control-label" for="name">
+									{{ errors.author_id ? '<i class="fa fa-times-circle-o"></i>': ''}}
+										 Author
+								</label>
+								<select class="form-control select2" style="width: 100%;" name="author_id"
+										   id="author_id" >
+								    {% if old.author_id %}
+									    <option selected="selected">
+										  	{{old.author_id}}
+									    </option>
+								    {% endif %}
+								    {% for table in table %}
+									    <option value="{{table.id}}">
+											{{table.name}}
+										</option>
+							   	    {% endfor %}
+								</select>
+								{% if errors.author_id %}
+								    <span class="help-block">
+										{{ errors.author_id | first }}
+									</span>
+								{% endif %}
+						    </div>
+							<button type="submit" class="btn btn-primary">Submit</button>
+							{{ csrf.field |raw  }}
+					</form>
+	            </div>
+	        </div>
         <!-- /.box-body -->
-        </div>
-    </section>
-</div>
+	    </section>
+	</div>
 {% endblock %}
