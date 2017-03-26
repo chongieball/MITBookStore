@@ -20,6 +20,7 @@ class Category extends BaseModel
                  ->setParameter($param, $bookId);
                  // echo $this->qb->getSQL();
         $execute = $this->qb->execute();
+        
         return $execute->fetchAll();
     }
 

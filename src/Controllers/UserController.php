@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace MBS\Controllers;
 
@@ -47,18 +47,23 @@ class UserController extends BaseController
 			'confirmpassword'	=> 'Repeat Password'
 			]);
 
-		//validate 
+		//validate
 		if ($this->validator->validate()) {
 			$user = new User($this->db);
 
-			$register = $user->checkDuplicate($request->getParam('username'), $request->getParam('email'));
+			$register = $user->checkDuplicate($request->getParam('username'),
+												$request->getParam('email'));
 
 			if ($register == 1) {
 				$_SESSION['errors'][] = 'Username is Taken';
+
 				return $response->withRedirect($this->router->pathFor('user.register'));
+
 			} elseif ($register == 2) {
 				$_SESSION['errors'][] = 'Email is Taken';
+
 				return $response->withRedirect($this->router->pathFor('user.register'));
+
 			} else {
 				$register = $request->getParams();
 				$this->delCsrfPost($register);
@@ -93,7 +98,7 @@ class UserController extends BaseController
 		} else {
 			return $response->withRedirect($this->router->pathFor('home'));
 		}
-		
+
 	}
 
 	public function postLogin(Request $request, Response $response)
@@ -133,11 +138,17 @@ class UserController extends BaseController
 	public function getEdit(Request $request, Response $response)
 	{
 		if ($request->getQueryParam('section') == 'shipping_address') {
-			return $this->view->render($response, 'front-end/user/edit_shipping_address.twig');
+			return $this->view->render($response,
+									  'front-end/user/edit_shipping_address.twig');
+
 		} elseif ($request->getQueryParam('section') == 'change_password') {
-			return $this->view->render($response, 'front-end/user/edit_password.twig');
+			return $this->view->render($response,
+			 						  'front-end/user/edit_password.twig');
+
 		} elseif ($request->getQueryParam('section') == 'general') {
-			return $this->view->render($response, 'front-end/user/edit_general.twig');
+			return $this->view->render($response,
+			 						  'front-end/user/edit_general.twig');
+
 		}
 		return $response->withStatus(404);
 	}
@@ -166,7 +177,7 @@ class UserController extends BaseController
 				'address'		=> 'Address',
 				]);
 
-			//validate 
+			//validate
 			if ($this->validator->validate()) {
 				$post = $this->delCsrfPost($request->getParsedBody());
 
@@ -178,7 +189,8 @@ class UserController extends BaseController
 				//when get error return old input
 				$_SESSION['old'] = $request->getParsedBody();
 
-				return $response->withRedirect($this->router->pathFor('user.edit')."?section=shipping_address");
+				return $response->withRedirect($this->router
+													->pathFor('user.edit')."?section=shipping_address");
 			}
 		} elseif ($request->getQueryParam('section') == 'change_password') {
 			$rules = [
@@ -200,29 +212,31 @@ class UserController extends BaseController
 				'repeat_password'	=> 'Repeat Password',
 			]);
 
-			//validate 
+			//validate
 			if ($this->validator->validate()) {
 				if (password_verify($request->getParam('old_password'), $_SESSION['user']['password'])) {
 					$password['password'] = $request->getParam('new_password');
 
 					$user->changePassword($password, 'id', $_SESSION['user']['id']);
-					
+
 				} else {
 					$_SESSION['errors']['old_password'][] = 'Old Password is Wrong';
 
-					return $response->withRedirect($this->router->pathFor('user.edit')."?section=change_password");
+					return $response->withRedirect($this->router
+														->pathFor('user.edit')."?section=change_password");
 				}
-				
+
 			} else {
 				$_SESSION['errors'] = $this->validator->errors();
 
 				//when get error return old input
 				$_SESSION['old'] = $request->getParsedBody();
 
-				return $response->withRedirect($this->router->pathFor('user.edit')."?section=change_password");
+				return $response->withRedirect($this->router
+													->pathFor('user.edit')."?section=change_password");
 			}
 		} elseif ($request->getQueryParam('section') == 'general') {
-			$rules = [ 
+			$rules = [
 				'email' => ['required', 'email'],
 			];
 			$this->validator->mapFieldsRules($rules);
@@ -237,7 +251,8 @@ class UserController extends BaseController
 				//when get error return old input
 				$_SESSION['old'] = $request->getParsedBody();
 
-				return $response->withRedirect($this->router->pathFor('user.edit')."?section=change_password");
+				return $response->withRedirect($this->router
+													->pathFor('user.edit')."?section=change_password");
 			}
 		}
 		$this->flash->addMessage('success', 'Your Account Has Been Update');
@@ -264,12 +279,14 @@ class UserController extends BaseController
 					$_SESSION['errors']['email'][] = 'Email is Wrong';
 				} else {
 					$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+					
     				$password = substr( str_shuffle( $chars ), 0, 6 );
 
     				$resetPass['password'] = password_hash($password, PASSWORD_BCRYPT);
 
     				// $user->update($resetPass, 'username', $request->getParam('username'));
-    				$this->flash->addMessage('success', 'Your Password is '. "<b>$password</b>. Please <a href='./login'>Login</a>");
+    				$this->flash->addMessage('success', 'Your Password is '.
+					 						 "<b>$password</b>. Please <a href='./login'>Login</a>");
 				}
 			} else {
 				$_SESSION['errors']['username'][] = 'Username is Wrong';

@@ -8,153 +8,184 @@
 {% block content %}
     <div class="content-wrapper">
     	<section class="content-header">
-    		<h1>
-				Book
-		    </h1>
-		    <ol class="breadcrumb">
-		        <li><a href="{{ path_for('book.index')}}"><i class="fa fa-book"></i>Book</a></li>
-		    </ol>
-      </section>
-      <section class="content">
+    		<h1>Book</h1>
+			    <ol class="breadcrumb">
+			        <li><a href="{{ path_for('book.index')}}">
+						<i class="fa fa-book"></i>Book</a>
+					</li>
+			    </ol>
+        </section>
+        <section class="content">
 			{% include 'templates/partials/flash.twig' %}
 				<div class="box">
-            <div class="box-header">
-              <h3 class="box-title">
-  		        <a href="{{ path_for('book.index')}}" class="btn btn-info"> Back</a>
-			  </h3>
-            </div>
+	            	<div class="box-header">
+		              <h3 class="box-title">
+		  		        <a href="{{ path_for('book.index')}}" class="btn btn-info"> Back</a>
+					  </h3>
+		            </div>
             <!-- /.box-header -->
-            <div class="box-body">
+		            <div class="box-body">
 
-<form role="form" action="{{path_for('book.add')}}" method="post" enctype="multipart/form-data">
+						<form role="form" action="{{path_for('book.add')}}" method="post" enctype="multipart/form-data">
 
-  <!-- input states -->
-  <div class="form-group {{ errors.publisher_id ? 'has-error' : '' }}">
-    <label class="control-label" for="name">
-		{{ errors.publisher_id ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		 Publisher
-	</label>
-	<select class="form-control select2" style="width: 100%;" name="publisher_id"
-	id="publisher_id" >
-    <option value="0">Select Publisher</option>
-	{% for table in table %}
-	  <option value="{{table.id}}">{{table.name}}</option>
-	{% endfor %}
-	</select>
+						  <!-- input states -->
+						    <div class="form-group {{ errors.publisher_id ? 'has-error' : '' }}">
+							    <label class="control-label" for="name">
+								{{ errors.publisher_id ? '<i class="fa fa-times-circle-o"></i>': ''}}
+									 Publisher
+								</label>
+								<select class="form-control select2" style="width: 100%;" name="publisher_id"
+										   id="publisher_id" >
+							    	<option value="0">Select Publisher</option>
+										{% for table in table %}
+										  	 <option value="{{table.id}}">{{table.name}}</option>
+										{% endfor %}
+								</select>
 
-	{% if errors.publisher_id %}
-    <span class="help-block">{{ errors.publisher_id | first }}</span>
-	{% endif %}
-  </div>
+								{% if errors.publisher_id %}
+							    	 <span class="help-block">{
+										 { errors.publisher_id | first }}
+									 </span>
+								{% endif %}
+						    </div>
 
-  <div class="form-group {{ errors.isbn ? 'has-error' : '' }}">
-	<label class="control-label" for="isbn">
-	   {{ errors.isbn ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		ISBN
-   </label>
-	<input type="text" name="isbn" class="form-control" id="isbn" placeholder="ISBN" value="{{old.isbn}}">
-   {% if errors.isbn %}
-	<span class="help-block">{{ errors.isbn | first }}</span>
-   {% endif %}
-  </div>
+						    <div class="form-group {{ errors.isbn ? 'has-error' : '' }}">
+								<label class="control-label" for="isbn">
+									{{ errors.isbn ? '<i class="fa fa-times-circle-o"></i>': ''}}
+										ISBN
+							    </label>
+								<input type="text" name="isbn" class="form-control" id="isbn"
+									   placeholder="ISBN" value="{{old.isbn}}">
+									{% if errors.isbn %}
+										<span class="help-block">
+											{{ errors.isbn | first }}
+										</span>
+									{% endif %}
+						    </div>
 
-  <div class="form-group {{ errors.title ? 'has-error' : '' }}">
-	<label class="control-label" for="title">
-	   {{ errors.title ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		Title
-   </label>
-	<input type="text" name="title" class="form-control" id="title" placeholder="Title" value="{{old.title}}">
-   {% if errors.title %}
-	<span class="help-block">{{ errors.title | first }}</span>
-   {% endif %}
-  </div>
+						    <div class="form-group {{ errors.title ? 'has-error' : '' }}">
+								<label class="control-label" for="title">
+									{{ errors.title ? '<i class="fa fa-times-circle-o"></i>': ''}}
+										Title
+							    </label>
+								<input type="text" name="title" class="form-control" id="title"
+									   placeholder="Title" value="{{old.title}}">
+								    {% if errors.title %}
+										<span class="help-block">
+											{{ errors.title | first }}
+										</span>
+								    {% endif %}
+						    </div>
 
-  <div class="form-group {{ errors.description ? 'has-error' : '' }}">
-	<label class="control-label" for="description">
-	   {{ errors.description ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		Description
-   </label>
-   <textarea name="description" class="form-control" id="description">{{old.description}}</textarea>
-   {% if errors.description %}
-	<span class="help-block">{{ errors.description | first }}</span>
-   {% endif %}
-  </div>
+						    <div class="form-group {{ errors.description ? 'has-error' : '' }}">
+								<label class="control-label" for="description">
+									{{ errors.description ? '<i class="fa fa-times-circle-o"></i>': ''}}
+										Description
+							    </label>
+							    <textarea name="description" class="form-control" id="description">
+									{{old.description}}
+								</textarea>
+								    {% if errors.description %}
+										 <span class="help-block">
+										 	{{ errors.description | first }}
+										</span>
+								    {% endif %}
+						    </div>
 
-  <div class="form-group {{ errors.publish_year ? 'has-error' : '' }}">
-	<label class="control-label" for="publish_year">
-	   {{ errors.publish_year ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		Publish Year
-   </label>
-	<input type="text" name="publish_year" class="form-control" id="publish_year" placeholder="Publish Year" value="{{old.publish_year}}">
-   {% if errors.publish_year %}
-	<span class="help-block">{{ errors.publish_year | first }}</span>
-   {% endif %}
-  </div>
+						    <div class="form-group {{ errors.publish_year ? 'has-error' : '' }}">
+								<label class="control-label" for="publish_year">
+									{{ errors.publish_year ? '<i class="fa fa-times-circle-o"></i>': ''}}
+										Publish Year
+							    </label>
+								<input type="text" name="publish_year" class="form-control"
+									   id="publish_year" placeholder="Publish Year" value="{{old.publish_year}}">
+								    {% if errors.publish_year %}
+										<span class="help-block">
+											{{ errors.publish_year | first }}
+										</span>
+								    {% endif %}
+						    </div>
 
-  <div class="form-group {{ errors.total_page ? 'has-error' : '' }}">
-	<label class="control-label" for="total_page">
-	   {{ errors.total_page ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		Total Page
-   </label>
-	<input type="text" name="total_page" class="form-control" id="total_page" placeholder="Total Page" value="{{old.total_page}}">
-   {% if errors.total_page %}
-	<span class="help-block">{{ errors.total_page | first }}</span>
-   {% endif %}
-  </div>
+						    <div class="form-group {{ errors.total_page ? 'has-error' : '' }}">
+								<label class="control-label" for="total_page">
+								   {{ errors.total_page ? '<i class="fa fa-times-circle-o"></i>': ''}}
+										Total Page
+							    </label>
+								<input type="text" name="total_page" class="form-control"
+									   id="total_page" placeholder="Total Page" value="{{old.total_page}}">
+								   {% if errors.total_page %}
+										<span class="help-block">
+											{{ errors.total_page | first }}
+										</span>
+								   {% endif %}
+						    </div>
 
-  <div class="form-group {{ errors.synopsis ? 'has-error' : '' }}">
-	<label class="control-label" for="synopsis">
-	   {{ errors.synopsis ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		Synopsis
-   </label>
-   <textarea name="synopsis" class="form-control">{{old.synopsis}}</textarea>
-   {% if errors.synopsis %}
-	<span class="help-block">{{ errors.synopsis | first }}</span>
-   {% endif %}
-  </div>
+						    <div class="form-group {{ errors.synopsis ? 'has-error' : '' }}">
+								<label class="control-label" for="synopsis">
+								   {{ errors.synopsis ? '<i class="fa fa-times-circle-o"></i>': ''}}
+										Synopsis
+							    </label>
+							    <textarea name="synopsis" class="form-control">
+								   	{{old.synopsis}}
+								</textarea>
+								   {% if errors.synopsis %}
+										<span class="help-block">
+											{{ errors.synopsis | first }}
+										</span>
+								   {% endif %}
+						    </div>
 
-  <div class="form-group {{ errors.images ? 'has-error' : '' }}">
-	<label class="control-label" for="images">
-	   {{ errors.images ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		Images (<i class="text-danger">*.jpg, *.png, *.gif</i>)
-   </label>
-	<input type="file" name="images" class="form-control" id="images" value="{{old.images}}">
-   {% if errors.images %}
-	<span class="help-block">{{ errors.images | first }}</span>
-   {% endif %}
-  </div>
+						    <div class="form-group {{ errors.images ? 'has-error' : '' }}">
+								<label class="control-label" for="images">
+								   {{ errors.images ? '<i class="fa fa-times-circle-o"></i>': ''}}
+										Images (<i class="text-danger">*.jpg, *.png, *.gif</i>)
+							    </label>
+								<input type="file" name="images" class="form-control" id="images" value="{{old.images}}">
+								   {% if errors.images %}
+										<span class="help-block">
+											{{ errors.images | first }}
+										</span>
+								   {% endif %}
+						    </div>
 
-  <div class="form-group {{ errors.price ? 'has-error' : '' }}">
-  <label class="control-label" for="price">
-	 {{ errors.price ? '<i class="fa fa-times-circle-o"></i>': ''}}
-	 Price
-   </label>
-  <input type="text" name="price" class="form-control" id="price" value="{{old.price}}">
-   {% if errors.price %}
-  <span class="help-block">{{ errors.price | first }}</span>
-   {% endif %}
-  </div>
+						    <div class="form-group {{ errors.price ? 'has-error' : '' }}">
+								<label class="control-label" for="price">
+								{{ errors.price ? '<i class="fa fa-times-circle-o"></i>': ''}}
+								 Price
+								</label>
+								<input type="text" name="price" class="form-control" id="price" value="{{old.price}}">
+									 {% if errors.price %}
+										<span class="help-block">
+											{{ errors.price | first }}
+										</span>
+									 {% endif %}
+						    </div>
 
-  <div class="form-group {{ errors.stock ? 'has-error' : '' }}">
-  <label class="control-label" for="stock">
-   {{ errors.stock ? '<i class="fa fa-times-circle-o"></i>': ''}}
-	Stock
-   </label>
-  <input type="text" name="stock" class="form-control" id="stock" value="{{old.stock}}">
-   {% if errors.stock %}
-  <span class="help-block">{{ errors.stock | first }}</span>
-   {% endif %}
-  </div>
+						    <div class="form-group {{ errors.stock ? 'has-error' : '' }}">
+							    <label class="control-label" for="stock">
+								     {{ errors.stock ? '<i class="fa fa-times-circle-o"></i>': ''}}
+								  		Stock
+							    </label>
+							    <input type="text" name="stock" class="form-control" id="stock" value="{{old.stock}}">
+								     {% if errors.stock %}
+									    <span class="help-block">
+											{{ errors.stock | first }}
+										</span>
+								     {% endif %}
+						    </div>
 
-<button type="submit" class="btn btn-primary">Submit</button>
-{{ csrf.field |raw }}
-</form>
+							<button type="submit" class="btn btn-primary">Submit</button>
+							<<<<<<< HEAD
+							{{ csrf.field |raw  }}
+							=======
+							{{ csrf.field |raw }}
+							>>>>>>> upstream/dev
+						</form>
 
 
-            </div>
-        </div>
-        <!-- /.box-body -->
-        </div>
-    </section>
-</div>
+	            </div>
+	        </div>
+	        <!-- /.box-body -->
+	    </section>
+	</div>
 {% endblock %}

@@ -1,11 +1,13 @@
-<?php 
+<?php
 
 namespace MBS\Models;
 
 class User extends BaseModel
 {
 	protected $table = 'user';
-	protected $column = ['id', 'username', 'email', 'password', 'name', 'phone', 'address', 'deleted'];
+
+	protected $column = ['id', 'username', 'email', 'password',
+	 					 'name', 'phone', 'address', 'deleted'];
 
 	public function register(array $data)
 	{
@@ -22,6 +24,7 @@ class User extends BaseModel
 		$data = [
 			'password' => password_hash($data['new_password'], PASSWORD_BCRYPT),
 			];
+			
 		$this->update($data, $column, $value);
 	}
 

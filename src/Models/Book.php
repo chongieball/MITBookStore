@@ -5,10 +5,13 @@ namespace MBS\Models;
 class Book extends BaseModel
 {
 	protected $table   = 'book';
+
     protected $column  = ['`id`, `publisher_id`, `isbn`, `title`, `description`,
-                        `publish_year`,`total_page`, `synopsis`, `images`, `price`, `stock`'];
+                          `publish_year`,`total_page`, `synopsis`, `images`, `price`, `stock`'];
+
     protected $columns = ['b.id', 'b.publisher_id', 'b.isbn','b.title',
-                        'b.description','b.publish_year', 'b.total_page', 'b.synopsis','b.images', 'b.price', 'b.stock', 'p.name AS publisher_name'];
+                          'b.description','b.publish_year', 'b.total_page',
+						  'b.synopsis','b.images','b.price', 'b.stock', 'p.name AS publisher_name'];
 
 	public function getIdWhereIn($ids)
 	{
@@ -17,6 +20,7 @@ class Book extends BaseModel
 					 ->from($this->table)
 					 ->where('id IN (' . implode(',', $ids) . ')');
 			$result = $this->db->execute();
+
 			return $result->fetchAll();
 		}
 	}
@@ -28,6 +32,7 @@ class Book extends BaseModel
         } else {
             settype($data['publisher_id'], "null");
         }
+
         $data = [
             'publisher_id'  => $data['publisher_id'],
             'isbn'          => $data['isbn'],
@@ -41,6 +46,7 @@ class Book extends BaseModel
             'price'         => $data['price'],
             'stock'         => $data['stock']
         ];
+
         $this->create($data);
     }
 
@@ -49,6 +55,7 @@ class Book extends BaseModel
         $data = [
             'images'    => $images
         ];
+
         $this->update($data, $column, $id);
     }
 
@@ -61,6 +68,7 @@ class Book extends BaseModel
         ->where('b.deleted = '. $deleted. ' AND b.id='.$param)
         ->setParameter($param, $id);
         $result = $this->qb->execute();
+		
         return $result->fetch();
     }
 

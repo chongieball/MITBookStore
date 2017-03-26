@@ -1,4 +1,7 @@
 /vendor
 composer.lock
 phinx.yml
+<<<<<<< HEAD
+=======
 /public/assets/adminlte
+>>>>>>> upstream/dev
