@@ -32,9 +32,9 @@ class AdminController extends BaseController
 		$verify   = password_verify($password, $check['password']);
 
 		if (!$verify) {
-			$_SESSION['errors'][] = 'Username/Password is Wrong';
+		    $_SESSION['errors'][] = 'Username/Password is Wrong';
 
-			return $response->withRedirect($this->router->pathFor('admin.signin'));
+		    return $response->withRedirect($this->router->pathFor('admin.signin'));
 		}
 
 		$_SESSION['admin'] = $check;
@@ -57,7 +57,7 @@ class AdminController extends BaseController
 		$verify   = password_verify($request->getParam('password_old'), $password);
 
 		if (!$verify) {
-                    $_SESSION['errors'][] = 'Your Old Password is Wrong';
+        	$_SESSION['errors'][] = 'Your Old Password is Wrong';
 			
 		    return $response->witRedirect($this->router->pathFor('admin.change.password'));
 
