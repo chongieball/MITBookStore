@@ -20,7 +20,7 @@ abstract class BaseModel
         $this->qb
             ->select($this->column)
             ->from($this->table)
-            ->where('deleted =0');
+            ->where('deleted = 0');
 
         $result = $this->qb->execute();
         return $result->fetchAll();
@@ -112,7 +112,7 @@ abstract class BaseModel
 	         ->execute();
 	}
 
-	public function delete($id)
+	public function hardDelete($id)
 	{
 	    $this->qb
 	    	 ->delete($this->table)

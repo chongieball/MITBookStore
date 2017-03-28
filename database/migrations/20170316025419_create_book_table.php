@@ -31,7 +31,8 @@ class CreateBookTable extends AbstractMigration
         $book->addColumn('publisher_id', 'integer', ['null' => true])
              ->addColumn('isbn', 'string')
              ->addColumn('title', 'string')
-             ->addColumn('desc', 'string')
+             ->addColumn('slug', 'string')
+             ->addColumn('description', 'string')
              ->addColumn('publish_year', 'year')
              ->addColumn('total_page', 'integer')
              ->addColumn('synopsis', 'text')
@@ -41,7 +42,7 @@ class CreateBookTable extends AbstractMigration
              ->addColumn('update_at', 'timestamp')
              ->addColumn('create_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
              ->addColumn('deleted', 'integer', ['limit' => 1, 'default' => 0])
-             ->addIndex(['isbn', 'title', 'publish_year'])
+             ->addIndex(['isbn', 'title', 'publish_year', 'slug'])
              ->addForeignKey('publisher_id', 'publisher', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION'])
              ->create();
     }

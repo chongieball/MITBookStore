@@ -1,5 +1,4 @@
 {% extends 'back-end/app.twig' %}
-{% block title %} Admin Page - MIT Book Store {% endblock %}
 
 {% block nav %}
 	{% include 'back-end/partials/navadmin.twig' %}
@@ -8,98 +7,91 @@
 {% block content %}
     <div class="content-wrapper">
     	<section class="content-header">
-    		<h1>
-				Detail Book
-		    </h1>
+    		<h1>Detail Book</h1>
 		    <ol class="breadcrumb">
 		        <li><a href="{{ path_for('book.index')}}"><i class="fa fa-book"></i>Book</a></li>
 		    </ol>
-			{% include 'templates/partials/flash.twig' %}
     	</section>
-			<section class="content">
-				<div class="box">
-            <div class="box-header">
-              <h3 class="box-title">
-				<a href="{{path_for('book.index')}}" class="btn btn-warning"> Back</a>
+		<section class="content">
+			{% include 'templates/partials/flash.twig' %}
+			<div class="box">
+            	<div class="box-header">
+                	<h3 class="box-title">
+					<a href="{{path_for('book.index')}}" class="btn btn-warning"> Back</a>
 					<a href="{{ path_for('book.add.author', {('id'):book.id})}}" class="btn btn-danger">Add Author Book</a>
 					<a href="{{ path_for('book.add.category', {('id'):book.id})}}"  class="btn btn-success">Add Category Book</a>
-			  </h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-				<div class="row">
-				  	<div class="col-lg-7 pull-left">
-				<table class="table">
-					<tr>
-						<th>Title</th>
-						<td>{{book.title}}</td>
-						<td></td>
-					</tr>
-					<tr>
-						<th>ISBN</th>
-						<td>{{book.isbn}}</td>
-						<td></td>
-					</tr>
-					<tr>
-						<th>Author</th>
-						<td>{{author}}</td>
-						<td>Tambah | Edit</td>
-					</tr>
-					<tr>
-						<th>Category</th>
-						<td>{{category}}</td>
-						<td>Tambah| Edit</td>
-					</tr>
-					<tr>
-						<th>Publisher</th>
-						<td>{{book.publisher_name ? book.publisher_name : '-'}}</td>
-					</tr>
-					<tr>
-						<th>Publish Year</th>
-						<td>{{book.publish_year}}</td>
-					</tr>
-					<tr>
-						<th>Price</th>
-						<td>{{book.price}}</td>
-					</tr>
-					<tr>
-						<th>Stock</th>
-						<td>{{book.stock}}</td>
-					</tr>
-				</table>
+			  		</h3>
+            	</div>
+            	<div class="box-body">
+					<div class="row">
+				  		<div class="col-lg-7 pull-left">
+							<table class="table">
+								<tr>
+									<th>Title</th>
+									<td>{{book.title}}</td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>ISBN</th>
+									<td>{{book.isbn}}</td>
+									<td></td>
+								</tr>
+								<tr>
+									<th>Author</th>
+									<td>{{author}}</td>
+									<td>Tambah | Edit</td>
+								</tr>
+								<tr>
+									<th>Category</th>
+									<td>{{category}}</td>
+									<td>Tambah| Edit</td>
+								</tr>
+								<tr>
+									<th>Publisher</th>
+									<td>{{book.publisher_name ? book.publisher_name : '-'}}</td>
+								</tr>
+								<tr>
+									<th>Publish Year</th>
+									<td>{{book.publish_year}}</td>
+								</tr>
+								<tr>
+									<th>Price</th>
+									<td>{{book.price}}</td>
+								</tr>
+								<tr>
+									<th>Stock</th>
+									<td>{{book.stock}}</td>
+								</tr>
+							</table>
+						</div>
+						<div class="col-lg-5 text-center pull-right" style="margin-top:-25px">
+							<h3>Cover</h3>
+							<img src="{{base_url()}}/upload/{{book.images}}"  width="200px" height="250px"><br>
+							<a href="{{path_for('book.change', {('id'):book.id})}}" class="btn btn-info btn-sm" title="Change Images">Change Image</a>
+						</div>
+					</div>
 				</div>
-				<div class="col-lg-5 text-center pull-right" style="margin-top:-25px">
-					<h3>Cover</h3>
-					<img src="{{base_url()}}/upload/{{book.images}}"  width="200px" height="250px"><br>
-					<a href="{{path_for('book.change', {('id'):book.id})}}" class="btn btn-info btn-sm" title="Change Images">Change Image</a>
+			</div>
+			<div class="box">
+            	<div class="box-body">
+              		<div class="col-lg-12">
+						<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th>Description</th>
+									<th>Synopsis</th>
+								</tr>
+                			</thead>
+			                <tbody>
+				                <tr>
+									<td>{{book.description}}</td>
+									<td class="col-lg-8 text-justify">{{book.synopsis}}</td>
+				                </tr>
+							</tbody>
+						</table>
+            		</div>
 				</div>
-			</div>
-
-			</div>
-			</div>
-				<div class="box">
-            <!-- /.box-header -->
-            <div class="box-body">
-
-              <div class="col-lg-12">
-<table class="table table-striped table-bordered" cellspacing="0" width="100%">
-				<thead>
-					<tr>
-						<th>Description</th>
-						<th>Synopsis</th>
-					</tr>
-                </thead>
-                <tbody>
-	                <tr>
-						<td>{{book.description}}</td>
-						<td class="col-lg-8 text-justify">{{book.synopsis}}</td>
-	                </tr>
-				</tbody>
-				</table>
             </div>
-		</div>
-            <!-- /.box-body -->
-          </div>
-			</section>
+		</section>
     </div>
 {% endblock %}

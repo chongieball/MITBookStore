@@ -1,5 +1,4 @@
 {% extends 'back-end/app.twig' %}
-{% block title %} Admin Page - MIT Book Store {% endblock %}
 
 {% block nav %}
 	{% include 'back-end/partials/navadmin.twig' %}
@@ -8,46 +7,35 @@
 {% block content %}
     <div class="content-wrapper">
     	<section class="content-header">
-    		<h1>
-				Category
-		    </h1>
+    		<h1>Category</h1>
 		    <ol class="breadcrumb">
 		        <li><a href="{{ path_for('category.index')}}"><i class="fa fa-book"></i>Category</a></li>
 		    </ol>
     	</section>
-			<section class="content">
-				<div class="box">
-            <div class="box-header">
-              <h3 class="box-title">
-  		        <a href="{{ path_for('category.index')}}" class="btn btn-info"> Back</a>
-			  </h3>
+		<section class="content">
+			<div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">
+  		            <a href="{{ path_for('category.index')}}" class="btn btn-info"> Back</a>
+			        </h3>
+                </div>
+                <div class="box-body">
+                    <form role="form" action="{{path_for('category.add')}}" method="post">
+                        <div class="form-group {{ errors.name ? 'has-error' : '' }}">
+                            <label class="control-label" for="name">
+		                    {{ errors.name ? '<i class="fa fa-times-circle-o"></i>': ''}}
+		                        Name
+	                        </label>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Name" value="{{old.name}}">
+	                        {% if errors.name %}
+                                <span class="help-block">{{ errors.name | first }}</span>
+	                        {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        {{csrf.field | raw}}
+                    </form>
+                </div>
             </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-
-<form role="form" action="{{path_for('category.add')}}" method="post">
-
-  <!-- input states -->
-  <div class="form-group {{ errors.name ? 'has-error' : '' }}">
-    <label class="control-label" for="name">
-		{{ errors.name ? '<i class="fa fa-times-circle-o"></i>': ''}}
-		 Name
-	</label>
-    <input type="text" name="name" class="form-control" id="name" placeholder="Name" value="{{old.name}}">
-	{% if errors.name %}
-    <span class="help-block">{{ errors.name | first }}</span>
-	{% endif %}
-  </div>
-
-<button type="submit" class="btn btn-primary">Submit</button>
-{{csrf.field | raw}}
-</form>
-
-
-            </div>
-        </div>
-        <!-- /.box-body -->
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
 {% endblock %}

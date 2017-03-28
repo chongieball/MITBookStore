@@ -11,14 +11,16 @@ class PublisherController extends BaseController
     public function index(Request $request, Response $response)
     {
         $publisher= new \MBS\Models\Publisher($this->db);
-        $data['table'] = $publisher->getAll();
+        $data['publisher'] = $publisher->getAll();
+
         return $this->view->render($response, 'back-end/publisher/index.twig', $data);
     }
 
     public function arsip(Request $request, Response $response)
     {
         $publisher= new \MBS\Models\Publisher($this->db);
-        $data['table'] = $publisher->getArchive();
+        $data['archive'] = $publisher->getArchive();
+
         return $this->view->render($response, 'back-end/publisher/arsip.twig', $data);
     }
 
@@ -29,20 +31,22 @@ class PublisherController extends BaseController
 
     public function postAdd(Request $request, Response $response)
     {
-        $this->validator->rule('required', ['name'])->message('{field} Must Not Empty');
+        $this->validator->rule('required', ['name']);
 
         if ($this->validator->validate()) {
             $name['name'] = $request->getParam('name');
+
             $publisher = new \MBS\Models\Publisher($this->db);
             $publisher->create($name);
-            $this->flash->addMessage('success', 'Add Data Success');
 
+            $this->flash->addMessage('success', 'Add Data Success');
         } else {
             $_SESSION['errors'] = $this->validator->errors();
+
             $_SESSION['old'] = $request->getParams();
+
             return $response->withRedirect($this->router->pathFor('publisher.add'));
         }
-
         return $response->withRedirect($this->router
           ->pathFor('publisher.index'));
     }
@@ -50,8 +54,13 @@ class PublisherController extends BaseController
     public function getUpdate(Request $request, Response $response, $args)
     {
         $publisher = new \MBS\Models\Publisher($this->db);
-        $data['table'] = $publisher->findNotDelete('id', $args['id']);
-        return $this->view->render($response, 'back-end/publisher/update.twig', $data);
+        $data['publisher'] = $publisher->findNotDelete('id', $args['id']);
+
+        if ($data['publisher']) {
+            return $this->view->render($response, 'back-end/publisher/update.twig', $data);
+        } else {
+            return $response->withStatus(404);
+        }
     }
 
     public function postUpdate(Request $request, Response $response, $args)
@@ -85,7 +94,8 @@ class PublisherController extends BaseController
 
         $publisher = new \MBS\Models\Publisher($this->db);
 
-        $find = $publisher->findNotDelete('id', $request->getParam('id'));
+        $find = $publisher->findNotDelete('id', $request->getParam('id'));\
+
         $_SESSION['delete'] = $find;
 
         $delete = $publisher->softDelete('id', $request->getParam('id'));
@@ -102,7 +112,8 @@ class PublisherController extends BaseController
 
         $publisher = new \MBS\Models\Publisher($this->db);
 
-        $find = $publisher->findNotDelete('id', $request->getParam('id'));
+        $find = $publisher->find('id', $request->getParam('id'));
+
         $_SESSION['delete'] = $find;
 
         $delete = $publisher->delete($request->getParam('id'));
@@ -120,6 +131,7 @@ class PublisherController extends BaseController
         $publisher = new \MBS\Models\Publisher($this->db);
 
         $find = $publisher->find('id', $request->getParam('id'));
+        
         $_SESSION['delete'] = $find;
 
         $delete = $publisher->restore($request->getParam('id'));

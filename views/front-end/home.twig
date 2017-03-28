@@ -9,32 +9,50 @@
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-header">
+						<h4 class="box-title"><b>Category</b></h4>
+					</div>
+					<div class="box-body">
+						<div class="category">
+							{% for category in category %}
+							<div class="col-md-4">
+								<a href="#" class="btn btn-default" style="width:100%">{{category.name}}</a>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="box">
+					<div class="box-header">
 						<h4 class="box-title"><b>New Book</b></h4><br>
 					</div>
 					<div class="box-body">
-						<div class="multiple">
+						<div class="new-book">
 							{% for book in book %}
 							<div class="col-md-2">
 								<div class="thumbnail">
 									<img src="{{base_url()}}/upload/{{book.images}}" alt="{{book.title}}" width="150px" height="150px">
 									<div class="caption">
 										<h4><b>{{book.title}}</b></h4>
-										{{book.price}} IDR
+										{{book.price | number_format }} IDR
 										<div class="pull-right">
 											<form action="{{path_for('cart.index')}}" method="POST">
-												<a data-toggle="modal" data-target="#{{book.id}}" title="Detail">
-													<button type="button" class="btn btn-info">
-														<i class="fa fa-search"></i>
-												</button>
-											</a>
+												<a href="{{path_for('book.slug', {slug: book.slug})}}" class="btn btn-info" title="Detail">
+													<i class="fa fa-search"></i>
+												</a>
 												{% if book.stock > 0 %}
-												<button name="cart" class="btn btn-success" value="{{book.id}}">
-													<i class="fa fa-shopping-cart"></i>
-												</button>
+													{% if basket.checkStock(book.id) %}
+														<button type="button" class="btn btn-danger disabled" title="Out of Stock">
+															<i class="fa fa-shopping-cart"></i>
+														</button>
+													{% else %}
+													    <button name="cart" class="btn btn-success" value="{{book.id}}">
+															<i class="fa fa-shopping-cart"></i>
+														</button>
+													{% endif %}
 												{% else %}
-												<a style="pointer:disabled"></a><button type="button" class="btn btn-danger disabled">
+												<a class="btn btn-danger" style="pointer:disabled">
 													<i class="fa fa-shopping-cart"></i>
-												</button>
+												</a>
 												{% endif %}
 												{{csrf.field | raw}}
 											</form>
@@ -78,78 +96,20 @@
 						</div>
 					</div>
 				</div>
-				{% for book in book %}
-				<div class="modal fade" id="{{book.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-body">
-								<ul class="nav nav-stacked">
-									<li>
-										<div class="col-md-4">
-											<img src="{{base_url()}}/upload/{{book.image}}" alt="{{book.title}}" width="225px" height="325px">
-										</div>
-										<div class="col-md-7 pull-right">
-											<table class="table table-hover">
-												<tr>
-													<td>
-														<b>131023821981</b>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<b>{{book.title}}</b>
-														<div class="pull-right">
-															403 Page(s)		
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>{{book.description}}</td>
-												</tr>
-												<tr>
-													<td>
-														By Tereliye
-														<div class="pull-right">
-															Publish By GM
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>Romance, Slice of Life</td>
-												</tr>
-												<tr>
-													<td class="text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum suscipit incidunt recusandae dignissimos obcaecati, dolorum repudiandae, nam aut dolor voluptatum dolores repellendus, placeat nihil praesentium odio. Adipisci, soluta. Dicta, vitae!
-													</td>
-												</tr>
-												<tr>
-													<td><h2><b>{{book.price}} IDR</b></h2></td>
-												</tr>
-											</table>
-										</div>
-									</li>
-								</ul>
-							</div>
-							<div class="modal-footer">
-							 	<form action="{{path_for('cart.index')}}" method="POST">
-							 		{% if book.stock > 0 %}
-							 		<button name="cart" value="{{book.id}}" class="btn btn-primary">Add to Cart</button>
-							 		{% else %}
-							 		 <label class="label label-danger">Out of Stock</label>
-							 		{% endif %}
-							 		{{csrf.field | raw}}
-							 	</form>
-      						</div>
-						</div>
-					</div>
-				</div>
-				{% endfor %}
 			</div>
 		</div>
 </section>
 {% endblock %}
 {% block script %}
     <script>
-    $('.multiple').slick({
+    $('.new-book').slick({
+  		infinite: true,
+  		slidesToShow: 2,
+  		slidesToScroll: 1
+	});
+    </script>
+    <script>
+    $('.category').slick({
   		infinite: true,
   		slidesToShow: 2,
   		slidesToScroll: 1

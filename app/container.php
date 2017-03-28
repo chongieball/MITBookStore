@@ -17,8 +17,6 @@ $container['db'] = function (Container $container) {
 		$config);
 
 	return $connect;
-
-	// return $connect->createQueryBuilder();
 };
 
 $container['view'] = function (Container $container) {
@@ -85,9 +83,4 @@ $container['basket'] = function (Container $container) {
 		$container->session, 
 		new MBS\Models\Book($container->db)
 	);
-};
-
-$container['upload'] = function (Container $container) {
-	$setting = $container->get('settings')['uploadPath'];
-	return new \Upload\Storage\FileSystem($setting);
 };

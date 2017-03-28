@@ -1,0 +1,74 @@
+{% extends 'front-end/app.twig' %}
+
+{% block title %}{{book.title}} - MBS Store {% endblock %}
+
+{% block content %}
+<section class="content">
+    <div class="row">
+    	<div class="col-md-3">
+    		<img src="{{base_url()}}/upload/{{book.images}}" alt="{{book.title}}" style="width:100%" class="thumbnail img-responsive">
+    	</div>
+    	<div class="col-md-4">
+    		<table class="table">
+    			<tr>
+    				<td>
+    					<b>No. ISBN : </b> {{book.isbn}}<br>
+    					{{book.total_page}} page(s)
+    				</td>
+    			<tr>
+    				<td>
+    					<h2><b>{{book.title}}</b></h2>
+    					{% for category in category %}
+    					<label for="{{category.name}}" class="label label-primary">{{category.name}}</label>
+    					{% endfor %}
+    				</td>
+    			</tr>
+    			</tr>
+    			<tr>
+    				<td>
+    					<i><big>{{book.description}}</big></i><br>
+    					<div class="pull-left">
+    						By : {{author}}	
+    					</div>
+						<div class="pull-right">
+							{% if book.publisher_id %}
+								Publish By: {{book.publisher_name}}
+							{% endif %}
+						</div>
+    				</td>
+    			</tr>
+    			<tr>
+    				<td>
+    					<h4><b>{{book.price | number_format}} IDR</b></h4> 
+    				</td>
+    			</tr>
+    		</table>
+    		<div class="text-right">
+	    		<form action="{{path_for('cart.index')}}" method="POST">
+	    		{% if book.stock > 0 %}
+	    			{% if basket.checkStock(book.id) %}
+	    				<label class="label label-danger">Out of Stock</label>
+	    			{% else %}
+		    			<button name="cart" class="btn btn-success" value="{{book.id}}">
+							Add to Cart
+						</button>
+					{% endif %}
+				{% else %}
+					<label class="label label-danger">Out of Stock</label>
+	    		{% endif %}
+    		</form>
+    		</div>
+    	</div>
+    	<div class="col-md-5">
+    		<table class="table">
+    			<tr>
+    				<th class="text-center">Synopsis</th>
+    			</tr>
+    			<tr>
+    				<td>{{book.synopsis}}</td>
+    			</tr>
+    		</table>
+    	</div>
+    </div>
+</section>
+{% endblock %}

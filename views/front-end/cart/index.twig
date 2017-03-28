@@ -1,11 +1,6 @@
 {% extends 'front-end/app.twig' %}
 
-{% block nav %}
-    {% include 'front-end/partials/navuser.twig' %}
 {% block title %}Cart - MIT Book Store{% endblock %}
-{% block nav %}
-    {% include 'front-end/partials/navuser.twig' %}
-{% endblock %}
 
 {% block content %}
 	<section class="content">
@@ -21,15 +16,37 @@
 									<th>Title</th>
 									<th>Price</th>
 									<th>Quantity</th>
+									<td></td>
 								</tr>
 							</thead>
 							<tbody>
 								{% for item in basket.all %}
 									<tr>
-										<td><img src="{{base_url()}}/upload/{{item.image}}" alt="{{item.title}}" width="100px" height="150px"/></td>
-										<td>{{item.title}}</td>
-										<td>{{item.price | number_format(2)}} IDR</td>
-										<td>{{item.qty}} (temp)</td>
+										<td><img src="{{base_url()}}/upload/{{item.images}}" alt="{{item.title}}" width="100px" height="150px"/></td>
+										<td><a href="{{path_for('book.slug', {slug:item.slug})}}">{{item.title}}</a></td>
+										<td>{{item.price | number_format}} IDR</td>
+										<form action="{{path_for('cart.update', { slug : item.slug })}}" method="POST">
+											<td>
+												<button name="update" class="btn btn-default" value="-1">
+													-
+												</button>
+												{{item.qty}}
+												{% if not basket.checkStock(item.id) %}
+													<button name="update" class="btn btn-default" value="1">
+														+
+													</button>
+												{% else %}
+												    <button type="button" class="btn btn-default" disabled title="Maximum Stock">
+														+
+													</button>
+												{% endif %}
+												
+											</td>
+											<td class="pull-right">
+												<button name="update" class="btn btn-danger" value="0" title="Remove">X</button>
+											</td>
+											{{csrf.field | raw}}
+										</form>
 									</tr>
 								{% endfor %}
 							</tbody>

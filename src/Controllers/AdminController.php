@@ -35,7 +35,6 @@ class AdminController extends BaseController
 			return $response->withRedirect($this->router->pathFor('admin.signin'));
 		}
 
-
 		$_SESSION['admin'] = $check;
 		return $response->withRedirect($_SESSION['url']);
 	}
@@ -43,7 +42,6 @@ class AdminController extends BaseController
 	public function getChangePassword(Request $request, Response $response)
 	{
 		return $this->view->render($response, 'back-end/admin/changepassword.twig');
-
 	}
 
 	public function postChangePassword()
@@ -56,7 +54,7 @@ class AdminController extends BaseController
 		$verify   = password_verify($request->getParam('password_old'), $password);
 
 		if (!$verify) {
-      $_SESSION['errors'][] = 'Your Old Password is Wrong';
+      		$_SESSION['errors'][] = 'Your Old Password is Wrong';
 			return $response->witRedirect($this->router->pathFor('admin.change.password'));
 
 		} else {

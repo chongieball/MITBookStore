@@ -1,5 +1,4 @@
 {% extends 'back-end/app.twig' %}
-{% block title %} Admin Page - MIT Book Store {% endblock %}
 
 {% block nav %}
 	{% include 'back-end/partials/navadmin.twig' %}
@@ -8,63 +7,60 @@
 {% block content %}
     <div class="content-wrapper">
     	<section class="content-header">
-    		<h1>
-		       Arsip Category
-		    </h1>
+    		<h1>Arsip Category</h1>
 		    <ol class="breadcrumb">
 		        <li><a href="{{ path_for('category.index')}}"><i class="fa fa-book"></i>Category</a></li>
 		    </ol>
-			{% include 'templates/partials/flash.twig' %}
     	</section>
 		<section class="content">
+			{% include 'templates/partials/flash.twig' %}
 			<div class="box">
-		<div class="box-header">
-		  <h3 class="box-title">
-			<a href="{{path_for('category.index')}}" class="btn btn-info"> To Data</a>
-		  </h3>
-		</div>
-		<!-- /.box-header -->
-		<div class="box-body">
-		  <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-			<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Create at</th>
-					<th>Update at</th>
-					<th>Delete Permanent</th>
-					<th>Restore</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for table in table %}
-				<tr>
-					<td>{{table.name}}</td>
-					<td>{{table.create_at}}</td>
-					<td>{{table.update_at}}</td>
-					<td>
-						<form class="" action="{{path_for('category.delete')}}" method="post">
-							<button name="id" value="{{table.id}}" class="btn btn-danger" title="Delete Permanent">
-								<i class="fa fa-trash-o"></i>
-							</button>
-							{{ csrf.field |raw }}
-						</form>
-					</td>
-					<td>
-						<form class="" action="{{path_for('category.restore')}}" method="post">
-							<button name="id" value="{{table.id}}" class="btn btn-warning" title="Restore">
-								<i class="fa fa-reply"></i>
-							</button>
-							{{ csrf.field |raw }}
-						</form>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-			</table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-			</section>
+				<div class="box-header">
+					<h3 class="box-title">
+					<a href="{{path_for('category.index')}}" class="btn btn-info"> To Data</a>
+					</h3>
+				</div>
+				<div class="box-body">
+					<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+						<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Create at</th>
+									<th>Update at</th>
+									<th>Delete Permanent</th>
+									<th>Restore</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for archive in archive %}
+								<tr>
+									<td>{{archive.name}}</td>
+									<td>{{archive.create_at}}</td>
+									<td>{{archive.update_at}}</td>
+									<td>
+										<form class="" action="{{path_for('category.delete')}}" method="post">
+											<button name="id" value="{{archive.id}}" class="btn btn-danger" title="Delete Permanent">
+												<i class="fa fa-trash-o"></i>
+											</button>
+											{{ csrf.field |raw }}
+										</form>
+									</td>
+									<td>
+										<form class="" action="{{path_for('category.restore')}}" method="post">
+											<button name="id" value="{{archive.id}}" class="btn btn-warning" title="Restore">
+												<i class="fa fa-reply"></i>
+											</button>
+											{{ csrf.field |raw }}
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+            		</div>
+          		</div>
+          	</div>
+		</section>
     </div>
 {% endblock %}

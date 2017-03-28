@@ -21,12 +21,16 @@ class Basket
 		if ($this->has($book)) {
 			$qty = $this->get($book)['qty'] + $qty;
 		}
-
 		$this->update($book, $qty);
 	}
 
-	public function update($book,$qty = 1)
+	public function update($book,$qty)
 	{
+		if ($qty == 0) {
+			$this->remove($book);
+			return;
+		}
+
 		$this->storage->set($book['id'], [
 			'book_id'	=> (int) $book['id'],
 			'qty'		=> (int) $qty,
@@ -81,6 +85,12 @@ class Basket
 		return count($this->storage);
 	}
 
+	public function checkStock($id)
+	{
+		$findBook = $this->book->find('id', $id);
+		return $this->get($findBook)['qty'] >= $findBook['stock'];
+	}
+
 	public function subTotal()
 	{
 		$total = 0;
@@ -104,5 +114,14 @@ class Basket
 		}
 
 		return $total;
+	}
+
+	public function refresh()
+	{
+		foreach ($this->all() as $value) {
+			if ($value['stock'] <= $value['qty']) {
+				$this->update($value, $value['stock']);
+			}
+		}
 	}
 }

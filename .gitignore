@@ -1,4 +1,5 @@
 /vendor
-composer.lock
 phinx.yml
+composer.lock
 /public/assets/adminlte
+/app/settings.php

@@ -11,14 +11,14 @@ class BookController extends BaseController
     public function index(Request $request, Response $response)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->getAll();
+        $data['book'] = $book->getAll();
         return $this->view->render($response, 'back-end/book/index.twig', $data);
     }
 
     public function arsip(Request $request, Response $response)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->getArchive();
+        $data['archive'] = $book->getArchive();
         return $this->view->render($response, 'back-end/book/arsip.twig', $data);
     }
 
@@ -52,7 +52,7 @@ class BookController extends BaseController
     {
 
         $publisher= new \MBS\Models\Publisher($this->db);
-        $data['table'] = $publisher->getAll();
+        $data['publisher'] = $publisher->getAll();
         return $this->view->render($response, 'back-end/book/add.twig', $data);
     }
 
@@ -108,13 +108,15 @@ class BookController extends BaseController
 
         if ($this->validator->validate()) {
             $book = new \MBS\Models\Book($this->db);
+
             if ($file->upload()) {
                 $book->add($request->getParams(), $data['name']);
+
                 $this->flash->addMessage('success', 'Add Data Success');
             } else {
                 $errors = $file->getErrors();
-                $error = print_r($errors);
-                $_SESSION['errors'] = $this->validator->errors();
+                // $error = print_r($errors);
+                $_SESSION['errors'] = $errors;
 
                 $_SESSION['old'] = $request->getParams();
 
@@ -122,7 +124,6 @@ class BookController extends BaseController
 
                 return $response->withRedirect($this->router->pathFor('book.add'));
             }
-
         } else {
 
             $_SESSION['errors'] = $this->validator->errors();
@@ -138,7 +139,8 @@ class BookController extends BaseController
     public function getUpdate(Request $request, Response $response, $args)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->allDetail($args['id'], 0);
+        $data['book'] = $book->allDetail($args['id'], 0);
+
         $publisher = new \MBS\Models\Publisher($this->db);
         $data['publisher'] = $publisher->getAll();
 
@@ -191,18 +193,22 @@ class BookController extends BaseController
                 ->pathFor('book.update', ['id' => $args['id']]));
         }
 
-        return $response->withRedirect($this->router
-                  ->pathFor('book.index'));
+        return $response->withRedirect($this->router->pathFor('book.index'));
     }
 
-    public function getChange(Request $request, Response $response, $args)
+    public function getChangeImage(Request $request, Response $response, $args)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['table'] = $book->findNotDelete('id', $args['id']);
-        return $this->view->render($response, 'back-end/book/change.twig', $data);
+        $data['book'] = $book->findNotDelete('id', $args['id']);
+
+        if ($data['book']) {
+            return $this->view->render($response, 'back-end/book/changeImage.twig', $data);
+        } else {
+            return $response->withStatus(404);
+        }
     }
 
-    public function postChange(Request $request, Response $response, $args)
+    public function postChangeImage(Request $request, Response $response, $args)
     {
         $storage = new \Upload\Storage\FileSystem('upload');
         $file = new \Upload\File('images', $storage);
@@ -245,7 +251,7 @@ class BookController extends BaseController
                 $this->flash->addMessage('errors', $error);
 
                 return $response->withRedirect($this->router
-                    ->pathFor('book.chage'));
+                    ->pathFor('book.change.image'));
             }
 
         } else {
@@ -255,7 +261,7 @@ class BookController extends BaseController
             $_SESSION['old'] = $request->getParams();
 
             return $response->withRedirect($this->router
-                ->pathFor('book.change'));
+                ->pathFor('book.change.image'));
         }
 
         return $response->withRedirect($this->router
@@ -267,7 +273,8 @@ class BookController extends BaseController
 
         $book = new \MBS\Models\Book($this->db);
 
-        $find = $book->find('id', $request->getParam('id'));
+        $find = $book->findNotDelete('id', $request->getParam('id'));
+
         $_SESSION['delete'] = $find;
 
         $delete = $book->softDelete('id', $request->getParam('id'));
@@ -285,6 +292,7 @@ class BookController extends BaseController
         $book = new \MBS\Models\Book($this->db);
 
         $find = $book->find('id', $request->getParam('id'));
+
         $_SESSION['delete'] = $find;
 
         $delete = $book->delete($request->getParam('id'));
@@ -292,8 +300,7 @@ class BookController extends BaseController
         $this->flash->addMessage('info', $_SESSION['delete']['title'].' has been deleted permanent');
         unset($_SESSION['delete']);
 
-        return $response->withRedirect($this->router
-                  ->pathFor('book.arsip'));
+        return $response->withRedirect($this->router->pathFor('book.arsip'));
     }
 
     public function restore(Request $request, Response $response)
@@ -302,6 +309,7 @@ class BookController extends BaseController
         $book = new \MBS\Models\Book($this->db);
 
         $find = $book->find('id', $request->getParam('id'));
+
         $_SESSION['restore'] = $find;
 
         $delete = $book->restore($request->getParam('id'));
@@ -309,7 +317,38 @@ class BookController extends BaseController
         $this->flash->addMessage('info', $_SESSION['restore']['title'].' has been restored');
         unset($_SESSION['delete']);
 
-        return $response->withRedirect($this->router
-                  ->pathFor('book.arsip'));
+        return $response->withRedirect($this->router->pathFor('book.arsip'));
+    }
+
+    public function getSlug(Request $request, Response $response, $args)
+    {
+        $book = new \MBS\Models\Book($this->db);
+        $data['book'] = $book->allDetail('slug', $args['slug'], 0);
+
+        $author = new \MBS\Models\Author($this->db);
+        $authorBook = $author->showAuthorBook($data['book']['id']);
+
+        $category = new \MBS\Models\Category($this->db);
+        $categoryBook = $category->showCategoryBook($data['book']['id']);
+
+        if ($authorBook && $categoryBook) {
+            foreach ($authorBook as $key => $value) {
+                $ab[] = implode('', $value);
+            }
+            $data['author'] = implode(', ', $ab);
+
+            foreach ($categoryBook as $value) {
+                $cb[] = $value;
+            }
+            $data['category'] = $cb;
+        } else {
+            return $response->withStatus(404);
+        }
+
+        if (!$data['book']) {
+            return $response->withStatus(404);
+        }
+
+        return $this->view->render($response, 'front-end/book/slug.twig', $data);
     }
 }
