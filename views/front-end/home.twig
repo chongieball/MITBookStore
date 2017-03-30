@@ -1,0 +1,72 @@
+{% extends 'front-end/app.twig' %}
+
+{% block title %} MIT Book Store {% endblock %}
+
+{% block content %}
+<section class="content">
+	{% include 'templates/partials/flash.twig'%}
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h4 class="box-title"><b>New Book</b></h4><br>
+					</div>
+					<div class="box-body">
+						<div class="new-book">
+							{% for book in book %}
+							<div class="col-md-2">
+								<div class="thumbnail">
+									<img src="{{base_url()}}/upload/{{book.images}}" alt="{{book.title}}" width="150px" height="150px">
+									<div class="caption">
+										<h4><b>{{book.title}}</b></h4>
+										{{book.price | number_format }} IDR
+										<div class="pull-right">
+											<form action="{{path_for('cart.index')}}" method="POST">
+												<a href="{{path_for('book.slug', {slug: book.slug})}}" class="btn btn-info" title="Detail">
+													<i class="fa fa-search"></i>
+												</a>
+												{% if book.stock > 0 %}
+													{% if basket.checkStock(book.id) %}
+														<button type="button" class="btn btn-danger disabled" title="Out of Stock">
+															<i class="fa fa-shopping-cart"></i>
+														</button>
+													{% else %}
+													    <button name="cart" class="btn btn-success" value="{{book.id}}">
+															<i class="fa fa-shopping-cart"></i>
+														</button>
+													{% endif %}
+												{% else %}
+												<a class="btn btn-danger" style="pointer:disabled">
+													<i class="fa fa-shopping-cart"></i>
+												</a>
+												{% endif %}
+												{{csrf.field | raw}}
+											</form>
+										</div> 		
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</section>
+{% endblock %}
+{% block script %}
+    <script>
+    $('.new-book').slick({
+  		infinite: true,
+  		slidesToShow: 2,
+  		slidesToScroll: 1
+	});
+    </script>
+    <script>
+    $('.category').slick({
+  		infinite: true,
+  		slidesToShow: 2,
+  		slidesToScroll: 1
+	});
+    </script>
+{% endblock %}

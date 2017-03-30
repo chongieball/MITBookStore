@@ -1,0 +1,81 @@
+<header class="main-header">
+    <nav class="navbar navbar-static-top" role="navigation">
+        <div class="navbar-header">
+            <a href="{{ path_for('home')}}" class="navbar-brand">
+                <span class="logo-lg"><b>MIT</b> Book Store</span>
+            </a> 
+        </div>
+        <div class="navbar-custom-menu">
+            {% set no = basket.itemCount %}
+            <ul class="nav navbar-nav">
+                <li class="header">
+                    <form action="{{path_for('book.search')}}" method="GET" class="sidebar-form">
+                        <div class="input-group">
+                            <input type="text" placeholder="Search Book..." name="search">
+                            <span class="input-group-btn">
+                                <button id="search-btn" class="btn btn-flat">
+                                    <i class="fa fa-book"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                </li>
+                <li class="dropdown messages-menu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" style="cursor:pointer">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="label label-success">{{no}}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if no > 0 %}
+                        <li class="header">You have {{no}} cart(s)</li>
+                        <li>
+                            {% set book = '' %}
+                            {% for item in basket.all %}
+                                {% set book = item %}
+                            {% endfor %}
+                            <ul class="menu">
+                                <li>
+                                    <div class="pull-left">
+                                        <img src="{{base_url()}}/upload/{{book.images}}" class="img-circle" alt="Cart Image" style="width:100px;height:100px">
+                                    </div>
+                                    <h4>
+                                        {{book.title}}<br/>
+                                        <small>{{book.qty}} qty</small>
+                                    </h4>
+                                    {% set total = book.qty * book.price %}
+                                    <p><b>{{total | number_format()}} IDR</b></p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="footer"><a href="{{path_for('cart.index')}}">See All Carts</a></li>
+                        {% else %}
+                        <li class="header">Your Cart is Empty</li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% if user %}
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="hidden-xs">{{user.username}}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="user-footer">
+                                <a href="{{path_for('user.account')}}" class="btn btn-default btn-flat">My Account</a>
+                        </li>
+                        <li class="user-footer">
+                                <a href="{{path_for('user.logout')}}" class="btn btn-default btn-flat">Sign out</a>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li>
+                    <a data-toggle="modal" href="javascript:void(0)" onclick="openLoginModal();" title="Login"><i class="fa fa-lock"></i></a>
+                </li>
+                <li>
+                    <a data-toggle="modal" href="javascript:void(0)" onclick="openRegisterModal();" title="Register"><i class="fa fa-user-plus"></i></a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>

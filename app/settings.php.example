@@ -11,19 +11,24 @@ return [
 
 	//setting language
 	'lang'	=> [
-		'default'	=> 'id',
+		'default'	=> 'en',
 	],
 
 	//setting db (with doctrine)
 	'db'	=> [
-		'url'	=> 'mysql://root:poikoiloi@@chongieball/chongieball_framework',
+		'url'	=> 'mysql://root:poikoiloi@@localhost/mbs',
 	],
 
 	//setting view (using twig)
 	'view'	=> [
-		'path'	=> '../views',
+		'path'	=> __DIR__. '/../views',
 		'twig'	=> [
 			'cache'	=> false,
 			],
 	],
+
+	'determineRouteBeforeAppMiddleware' => true,
+
+	//setting upload
+	'uploadPath'	=> 'upload',
 ];

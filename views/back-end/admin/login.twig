@@ -1,0 +1,20 @@
+{% extends 'back-end/app.twig' %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{base_url()}}/assets/css/loginadmin.css">
+{% endblock %}
+
+{% block content %}
+<form class="form-signin" action="{{path_for('admin.login')}}" method="POST">
+	{% if errors.0 %}
+        <div class="alert alert-danger">
+            {{errors.0}}
+        </div>
+    {% endif %}       
+    <h2 class="form-signin-heading">MBS</h2>
+    	<input type="text" class="form-control" name="username" placeholder="Username">
+      	<input type="password" class="form-control" name="password" placeholder="Password">      
+      	<button class="btn btn-lg btn-primary btn-block">Login</button>
+      	{{csrf.field | raw}}
+    </form>
+{% endblock %}
