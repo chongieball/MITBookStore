@@ -144,8 +144,6 @@ class UserController extends BaseController
 
 	public function postEdit(Request $request, Response $response)
 	{
-		$user = new User($this->db);
-
 		if ($request->getQueryParam('section') == 'shipping_address') {
 			$rules = [
 				'required'	=> [
@@ -170,8 +168,8 @@ class UserController extends BaseController
 			if ($this->validator->validate()) {
 				$post = $this->delCsrfPost($request->getParsedBody());
 
+				$user = new User($this->db);
 				$user->update($post, 'id', $_SESSION['user']['id']);
-
 			} else {
 				$_SESSION['errors'] = $this->validator->errors();
 
@@ -205,14 +203,13 @@ class UserController extends BaseController
 				if (password_verify($request->getParam('old_password'), $_SESSION['user']['password'])) {
 					$password['password'] = $request->getParam('new_password');
 
+					$user = new User($this->db);
 					$user->changePassword($password, 'id', $_SESSION['user']['id']);
-					
 				} else {
 					$_SESSION['errors']['old_password'][] = 'Old Password is Wrong';
 
 					return $response->withRedirect($this->router->pathFor('user.edit')."?section=change_password");
 				}
-				
 			} else {
 				$_SESSION['errors'] = $this->validator->errors();
 
@@ -230,6 +227,7 @@ class UserController extends BaseController
 			if ($this->validator->validate()) {
 				$email['email'] = $request->getParam('email');
 
+				$user = new User($this->db);
 				$user->update($email, 'id', $_SESSION['user']['id']);
 			} else {
 				$_SESSION['errors'] = $this->validator->errors();
@@ -241,6 +239,9 @@ class UserController extends BaseController
 			}
 		}
 		$this->flash->addMessage('success', 'Your Account Has Been Update');
+		
+		$user = new User($this->db);
+		$_SESSION['user'] = $user->find('id', $_SESSION['user']['id']);
 
 		return $response->withRedirect($this->router->pathFor('user.account'));
 	}

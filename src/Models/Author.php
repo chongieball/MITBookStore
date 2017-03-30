@@ -15,7 +15,7 @@ class Author extends BaseModel
         $this->qb->select($this->column[1])
                  ->from($this->table, 'a')
                  ->join('a', $ab, 'ab', $this->column[0]. ' = ab.author_id')
-                 ->join('a', 'book', 'b', 'ab.book_id = b.id')
+                 ->join('a', $b, 'b', 'ab.book_id = b.id')
                  ->where('ab.book_id = '. $param)
                  ->setParameter($param, $bookId);
                  // echo $this->qb->getSQL();

@@ -28,4 +28,7 @@ return [
 	],
 
 	'determineRouteBeforeAppMiddleware' => true,
+
+	//setting upload
+	'uploadPath'	=> 'upload',
 ];

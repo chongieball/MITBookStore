@@ -1,0 +1,74 @@
+{% extends 'front-end/app.twig' %}
+
+{% block title %}Order - MIT Book Store{% endblock %}
+
+{% block content %}
+	<section class="content-header">
+		<h1>Order</h1>
+		<ol class="breadcrumb">
+			<li><a href="{{path_for('home')}}"><i class="fa fa-home"></i>Home Page</a></li>
+        	<li class="active">Order</li>
+		</ol>
+	</section>
+	<section class="content">
+		{% include 'templates/partials/flash.twig'%}
+		<div class="row">
+			<div class="col-md-6">
+				<div class="well">
+					<h4>Your Shipping Address</h4>
+					<hr>
+					<table class="table">
+						<tr>
+							<th>Name</th>
+							<td>{{user.name}}</td>
+						</tr>
+						<tr>
+							<th>Phone</th>
+							<td>{{user.phone}}</td>
+						</tr>
+						<tr>
+							<th>Address</th>
+							<td>{{user.address}}</td>
+						</tr>
+					</table>
+					Want to edit your shipping address? <a href="{{path_for('user.edit')}}?section=shipping_address">Edit</a>
+				</div>
+			</div>
+			<div class="col-md-2"></div>
+			<div class="col-md-4">
+				<div class="well">
+					<h4>Your Order</h4>
+					<hr>
+					<table class="table">
+						<tr>
+							<th>Book</th>
+							<th>Quantity</th>
+							<th>Price</th>
+						</tr>
+						{% for item in order %}
+						<tr>
+							<td>{{item.title}}</td>
+							<td>{{item.qty}}</td>
+							<td>{{item.price * item.qty}}</td>
+						</tr>
+						{% endfor %}
+					</table>
+					<hr>
+					<table class="table">
+						<tr>
+							<th>Total Qty</th>
+							<td>{{basket.totalQty}}</td>
+						</tr>
+						<tr>
+							<th>Sub Total</th>
+							<td>{{basket.subTotal | number_format}} IDR</td>
+						</tr>
+					</table>
+					<form action="{{path_for('invoice.index')}}" method="POST">
+						<button class="btn btn-info">Confirm Order</button>
+						{{csrf.field | raw}}
+					</form>
+				</div>
+			</div>
+		</div>
+{% endblock %}

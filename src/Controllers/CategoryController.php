@@ -154,10 +154,13 @@ class CategoryController extends BaseController
         $this->validator->rule('required', ['category_id']);
 
         if ($this->validator->validate()) {
-            $category['category_id'] = $request->getParam('category_id');
+            $category = [
+                'category_id'   => $request->getParam('category_id'),
+                'book_id'       => $args['id'],
+            ];
             $categoryBook = new \MBS\Models\CategoryBook($this->db);
-            $categoryBook->add($category, $args['id']);
-
+            $categoryBook->create($category);
+            // die();
             $this->flash->addMessage('success', 'Add Data Success');
       } else {
           $_SESSION['errors'] = $this->validator->errors();

@@ -25,7 +25,7 @@ class BookController extends BaseController
     public function detail(Request $request, Response $response, $args)
     {
         $book = new \MBS\Models\Book($this->db);
-        $data['book'] = $book->allDetail($args['id'], 0);
+        $data['book'] = $book->allDetail('id', $args['id'], 0);
 
         $author = new \MBS\Models\Author($this->db);
         $authorBook = $author->showAuthorBook($args['id']);
@@ -38,6 +38,7 @@ class BookController extends BaseController
 
         $category = new \MBS\Models\Category($this->db);
         $categoryBook = $category->showCategoryBook($args['id']);
+        
         if ($categoryBook) {
             foreach ($categoryBook as $value) {
                 $cb[] = implode('', $value);
@@ -350,5 +351,14 @@ class BookController extends BaseController
         }
 
         return $this->view->render($response, 'front-end/book/slug.twig', $data);
+    }
+
+    public function search(Request $request, Response $response)
+    {
+        $book = new \MBS\Models\Book($this->db);
+        $data['search'] = $request->getQueryParam('search');
+        $data['book'] = $book->search($request->getQueryParam('search'));
+        
+        return $this->view->render($response, 'front-end/book/search.twig', $data);
     }
 }

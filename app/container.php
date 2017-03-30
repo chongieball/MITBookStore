@@ -84,3 +84,8 @@ $container['basket'] = function (Container $container) {
 		new MBS\Models\Book($container->db)
 	);
 };
+
+$container['upload'] = function (Container $container) {
+	$setting = $container->get('settings')['uploadPath'];
+	return new \Upload\Storage\FileSystem($setting);
+}; 

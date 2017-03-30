@@ -85,4 +85,13 @@ class Book extends BaseModel
         ];
         $this->update($data, $column, $value);
     }
+
+    public function search($title)
+    {
+        $this->qb->select($this->column)
+                 ->from($this->table)
+                 ->where('title LIKE "%'.$param.'%" AND deleted = 0');
+        $result = $this->qb->execute();
+        return $result->fetchAll();
+    }
 }

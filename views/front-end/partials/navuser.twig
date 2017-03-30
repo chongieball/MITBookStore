@@ -9,7 +9,7 @@
             {% set no = basket.itemCount %}
             <ul class="nav navbar-nav">
                 <li class="header">
-                    <form action="#" method="POST" class="sidebar-form">
+                    <form action="{{path_for('book.search')}}" method="GET" class="sidebar-form">
                         <div class="input-group">
                             <input type="text" placeholder="Search Book..." name="search">
                             <span class="input-group-btn">

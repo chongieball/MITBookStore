@@ -2,4 +2,5 @@
 phinx.yml
 composer.lock
 /public/assets/adminlte
+/public/upload
 /app/settings.php

@@ -63,6 +63,7 @@ abstract class BaseModel
 		$this->qb->insert($this->table)
 				->values($column)
 				->setParameters($paramData)
+				// echo $this->qb->getSQL();
 				->execute();
 	}
 

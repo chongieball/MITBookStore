@@ -70,12 +70,11 @@
 								<td>Sub Total</td>
 								<td>{{basket.subTotal | number_format}} IDR</td>
 							</tr>
-							<tr>
-								<td class="info">Total</td>
-								<td class="info">{{basket.subTotal | number_format}} IDR</td>
-							</tr>
 						</table>
-						<a href="#" class="btn btn-default">Checkout</a>
+						<form action="{{path_for('order.index')}}" method="POST">
+							<button class="btn btn-default">Check Out</button>
+							{{csrf.field | raw}}
+						</form>
 					</div>
 				{% endif %}
 			</div>

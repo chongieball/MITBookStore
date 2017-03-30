@@ -49,25 +49,29 @@
 								<tr>
 									<th>Publisher</th>
 									<td>{{book.publisher_name ? book.publisher_name : '-'}}</td>
+									<td></td>
 								</tr>
 								<tr>
 									<th>Publish Year</th>
 									<td>{{book.publish_year}}</td>
+									<td></td>
 								</tr>
 								<tr>
 									<th>Price</th>
 									<td>{{book.price}}</td>
+									<td></td>
 								</tr>
 								<tr>
 									<th>Stock</th>
 									<td>{{book.stock}}</td>
+									<td></td>
 								</tr>
 							</table>
 						</div>
 						<div class="col-lg-5 text-center pull-right" style="margin-top:-25px">
 							<h3>Cover</h3>
 							<img src="{{base_url()}}/upload/{{book.images}}"  width="200px" height="250px"><br>
-							<a href="{{path_for('book.change', {('id'):book.id})}}" class="btn btn-info btn-sm" title="Change Images">Change Image</a>
+							<a href="{{path_for('book.change.image', {('id'):book.id})}}" class="btn btn-info btn-sm" title="Change Images">Change Image</a>
 						</div>
 					</div>
 				</div>

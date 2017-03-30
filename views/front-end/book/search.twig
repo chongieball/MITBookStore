@@ -9,13 +9,12 @@
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-header">
-						<h4 class="box-title"><b>New Book</b></h4><br>
+						<h4 class="box-title">Searching <b>'{{search}}'</b></h4>
 					</div>
 					<div class="box-body">
-						<div class="new-book">
-							{% for book in book %}
-							<div class="col-md-2">
-								<div class="thumbnail">
+						{% for book in book %}
+						    <div class="col-md-4 col-sm-6">
+						    	<div class="thumbnail">
 									<img src="{{base_url()}}/upload/{{book.images}}" alt="{{book.title}}" width="150px" height="150px">
 									<div class="caption">
 										<h4><b>{{book.title}}</b></h4>
@@ -45,28 +44,11 @@
 										</div> 		
 									</div>
 								</div>
-							</div>
-							{% endfor %}
-						</div>
+						    </div>
+						{% endfor %}
 					</div>
 				</div>
 			</div>
 		</div>
-</section>
-{% endblock %}
-{% block script %}
-    <script>
-    $('.new-book').slick({
-  		infinite: true,
-  		slidesToShow: 2,
-  		slidesToScroll: 1
-	});
-    </script>
-    <script>
-    $('.category').slick({
-  		infinite: true,
-  		slidesToShow: 2,
-  		slidesToScroll: 1
-	});
-    </script>
+</section>   
 {% endblock %}
