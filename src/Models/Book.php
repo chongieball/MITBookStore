@@ -90,7 +90,7 @@ class Book extends BaseModel
     {
         $this->qb->select($this->column)
                  ->from($this->table)
-                 ->where('title LIKE "%'.$param.'%" AND deleted = 0');
+                 ->where('title LIKE "%'.$title.'%" AND deleted = 0');
         $result = $this->qb->execute();
         return $result->fetchAll();
     }

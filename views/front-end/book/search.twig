@@ -12,6 +12,7 @@
 						<h4 class="box-title">Searching <b>'{{search}}'</b></h4>
 					</div>
 					<div class="box-body">
+					{% if book %}
 						{% for book in book %}
 						    <div class="col-md-4 col-sm-6">
 						    	<div class="thumbnail">
@@ -46,7 +47,12 @@
 								</div>
 						    </div>
 						{% endfor %}
+					{% else %}
+						<div class="col-xs-12">
+							<h4><b>Not Found</b></h4>
+						</div>
 					</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
