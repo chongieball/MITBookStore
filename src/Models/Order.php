@@ -33,8 +33,8 @@ class Order extends BaseModel
     			 ->from($this->table, 'o')
     			 ->join('o', $orderItems, 'o_i', 'o_i.order_id = '.$this->column[0])
     			 ->join('o_i', $book, 'b', 'o_i.book_id = b.id')
-    			 ->where('o.id = '. $orderId);
-    			 // ->setParameter($param, $orderId);
+    			 ->where('o.id = '. $param)
+    			 ->setParameter($param, $orderId);
     			 // echo $this->qb->getSQL();
     	$result = $this->qb->execute();
     	return $result->fetchAll();

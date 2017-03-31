@@ -1,0 +1,89 @@
+{% extends 'front-end/app.twig' %}
+
+{% block title %} MIT Book Store {% endblock %}
+
+{% block content %}
+<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<section class="invoice">
+				  <div class="row">
+					<div class="col-xs-12">
+					  <h2 class="page-header">
+						<i class="fa fa-globe"></i>
+						<small class="pull-right">Date: {{invoice.create_at| slice(0,10)}}</small>
+					  </h2>
+					</div>
+				  </div>
+				  <div class="row invoice-info">
+					<div class="col-sm-4 invoice-col">
+					  <b>Invoice #{{invoice.code}}</b><br>
+					  <br>
+					  <b>Order ID:</b> {{invoice.order_id}}<br>
+					</div>
+					<div class="col-sm-4 invoice-col">
+					  To
+					  <address>
+						<strong>{{user.name}}</strong><br>
+						{{user.address}}<br>
+						Phone: {{user.phone}}<br>
+						Email: {{user.email}}
+					  </address>
+					</div>
+				  </div>
+				  <div class="row">
+					<div class="col-xs-12 table-responsive">
+					  <table class="table table-striped">
+						<thead>
+						<tr>
+						  <th>Qty</th>
+						  <th>Product</th>
+						  <th>Price</th>
+						</tr>
+						</thead>
+						<tbody>
+						{% for order in order %}
+						<tr>
+						  <td>{{order.qty}}</td>
+						  <td>{{order.title}}</td>
+						  <td>{{order.price * order.qty | number_format }} IDR</td>
+						</tr>
+						{% endfor %}
+						</tbody>
+					  </table>
+					</div>
+				  </div>
+				  <div class="row">
+					<div class="col-xs-6 col-xs-offset-6">
+					  <div class="table-responsive">
+						<table class="table">
+						  <tr>
+							<th style="width:50%">Subtotal:</th>
+							<td>{{basket.subTotal | number_format}} IDR</td>
+						  </tr>
+						  <tr>
+							<th>Unique Code</th>
+							<td>{{invoice.unique | number_format}} IDR</td>
+						  </tr>
+						  <tr>
+							<th>Total:</th>
+							<td>{{invoice.total_price | number_format}} IDR</td>
+						  </tr>
+						</table>
+					  </div>
+					</div>
+				  </div>
+				  <div class="row no-print">
+					<div class="col-xs-12">
+					  <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment
+					  </button>
+					  <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
+						<i class="fa fa-download"></i> Generate PDF
+					  </button>
+					</div>
+				  </div>
+				</section>
+			</div>
+		</div>
+</section>
+{% endblock %}
