@@ -94,7 +94,7 @@ class PublisherController extends BaseController
 
         $publisher = new \MBS\Models\Publisher($this->db);
 
-        $find = $publisher->findNotDelete('id', $request->getParam('id'));\
+        $find = $publisher->findNotDelete('id', $request->getParam('id'));
 
         $_SESSION['delete'] = $find;
 

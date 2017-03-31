@@ -26,7 +26,7 @@
 		                    {{ errors.name ? '<i class="fa fa-times-circle-o"></i>': ''}}
 		                    Name
 	                        </label>
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Name" value="{{old.name ? old.name : table.name}}">
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Name" value="{{old.name ? old.name : author.name}}">
 	                        {% if errors.name %}
                                 <span class="help-block">{{ errors.name | first }}</span>
 	                        {% endif %}
