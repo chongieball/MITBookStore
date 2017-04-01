@@ -13,7 +13,7 @@ class HomeController extends BaseController
 	{
 		$book = new Book($this->db);
 		$data['book'] = $book->getAll();
-
+		// unset($_SESSION['cart']);
 		$category = new \MBS\Models\Category($this->db);
 		$data['category'] = $category->getAll();
 		

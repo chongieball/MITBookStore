@@ -144,7 +144,6 @@ $app->group('', function () use ($app, $namespace) {
 	    ->setName('user.account');
 	    
 	$app->get('/order', $namespace. '\OrderController:index')->setName('order.index');
-	$app->post('/order', $namespace. '\OrderController:order');
 
 	$app->get('/invoice', $namespace. '\InvoiceController:index')->setName('invoice.index');
 	$app->post('/invoice', $namespace. '\InvoiceController:add');
@@ -154,6 +153,8 @@ $app->get('/cart', $namespace. '\CartController:index')->setName('cart.index');
 $app->post('/cart', $namespace. '\CartController:add');
 $app->post('/cart/update/{slug}', $namespace. '\CartController:update')
     ->setName('cart.update');
+
+$app->post('/order', $namespace. '\OrderController:order');
 
 $app->get('/book', $namespace. '\BookController:search')->setName('book.search');
 

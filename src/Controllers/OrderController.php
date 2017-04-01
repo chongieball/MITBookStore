@@ -17,7 +17,6 @@ class OrderController extends BaseController
 			return $response->withRedirect($this->router->pathFor('cart.index'));
 		}
 
-
 		$orderId = $_SESSION['order']['id'];
 
 		$order = new \MBS\Models\Order($this->db);
@@ -28,10 +27,16 @@ class OrderController extends BaseController
 
 	public function order(Request $request, Response $response)
 	{
+		if (!isset($_SESSION['user'])) {
+			$_SESSION['url'] = $this->router->pathFor('cart.index');
+
+			return $response->withRedirect($this->router->pathFor('user.login'));
+		}
 		$order = new \MBS\Models\Order($this->db);
 		$addOrder['user_id'] = $_SESSION['user']['id'];
+
 		$orderId = $order->add($addOrder);
-		// die();
+
 		$orderItem = new \MBS\Models\OrderItem($this->db);
 
 		foreach ($this->basket->all() as $value) {

@@ -11,10 +11,15 @@ class InvoiceController extends BaseController
 	{
 		$invoice = new \MBS\Models\Invoice($this->db);
 		$data['invoice'] = $invoice->find('order_id', $_SESSION['order']['id']);
-		$data['invoice']['unique'] = substr($data['invoice']['total_price'], -2) - substr($data['invoice']['code'], -2);
+		$data['invoice']['unique'] = substr($data['invoice']['code'], -2);
 		
 		$order = new \MBS\Models\Order($this->db);
 		$data['order'] = $order->show($_SESSION['order']['id']);
+
+		unset($_SESSION['order']);
+		unset($_SESSION['invoice']);
+
+		$this->basket->clear();
 
 		return $this->view->render($response, 'front-end/invoice/invoice.twig', $data);
 	}
@@ -28,8 +33,23 @@ class InvoiceController extends BaseController
 			'total_price'	=> $this->basket->subTotal() + substr($date, -2),
 		];
 		$invoice = new \MBS\Models\Invoice($this->db);
-		$invoice->create($data);
+		$_SESSION['invoice']['id'] = $invoice->add($data);
+
+		$order = new \MBS\Models\Order($this->db);
+		$showOrder = $order->show($_SESSION['order']['id']);
+
+		foreach ($showOrder as $key => $value) {
+			$book = new \MBS\Models\Book($this->db);
+			$findBook = $book->find('id', $value['book_id']);
+			$dataBook[] = $findBook;
+
+			foreach ($dataBook as $key => $val) {
+				$update['stock'] = $val['stock'] - $value['qty'];
+				$book->update($update, 'id', $val['id']);
+			}
+		}
 		
 		return $this->index($request, $response);
 	}
+
 }

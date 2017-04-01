@@ -59,7 +59,7 @@
 						<table class="table">
 						  <tr>
 							<th style="width:50%">Subtotal:</th>
-							<td>{{basket.subTotal | number_format}} IDR</td>
+							<td>{{(invoice.total_price - invoice.unique) | number_format}} IDR</td>
 						  </tr>
 						  <tr>
 							<th>Unique Code</th>

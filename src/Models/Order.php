@@ -6,7 +6,7 @@ class Order extends BaseModel
 {
     protected $table = '`order`';
     protected $column = ['id', 'user_id', 'create_at'];
-    private $showAll = ['o.id', 'o.create_at', 'o_i.qty', 'b.title', 'b.price',];
+    private $showAll = ['o.id', 'o.create_at', 'o_i.qty', 'b.id AS book_id', 'b.title', 'b.price',];
 
     public function add(array $data)
     {
@@ -17,11 +17,6 @@ class Order extends BaseModel
     	$this->create($data);
     	return $this->db->lastInsertId();
     }
-
-    // public function getOrderItem($order)
-    // {
-    // 	$this->qb->select()
-    // }
 
     public function show($orderId)
     {
